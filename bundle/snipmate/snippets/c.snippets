@@ -15,17 +15,17 @@ snippet Inc
 snippet Def
 	#ifndef $1
 	#define ${1:SYMBOL} ${2:value}
-	#endif${3}
+	#endif /* $1 */
 snippet def
 	#define 
 snippet ifdef
 	#ifdef ${1:FOO}
 		${2:#define }
-	#endif
+	#endif /* $1 */
 snippet #if
 	#if ${1:FOO}
 		${2}
-	#endif
+	#endif /* $1 */
 # Header Include-Guard
 # (the randomizer code is taken directly from TextMate; it could probably be
 # cleaner, I don't know how to do it in vim script)
@@ -88,9 +88,9 @@ snippet st
 	}${3: /* optional variable list */};${4}
 # Typedef struct
 snippet tds
-	typedef struct ${2:_$1 }{
-		${3:/* data */}
-	} ${1:`Filename('$1_t', 'name')`};
+	typedef struct ${1:`Filename('$1', 'name')`} {
+		${2:/* data */}
+	} $1_t;
 # Typdef enum
 snippet tde
 	typedef enum {

@@ -49,7 +49,6 @@ let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$', '\.o$', '\.so
 let NERDTreeHighlightCursorline=1
 let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
-let NERDTreeShowHidden=1
 
 let g:yankring_history_dir = '$HOME/.vim'
 
@@ -179,8 +178,8 @@ endif
 nnoremap <C-g> :cscope find 
 set directory=~/.vim/swap
 
+set completeopt=menuone
 
-filetype plugin indent on
 map <F1> :set lines=75<CR>
 map <F2> :set lines=57<CR>:set columns=200<CR>
 
