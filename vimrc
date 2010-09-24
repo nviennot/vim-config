@@ -129,7 +129,7 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""
 
 let g:showmarks_hlline_lower=1
-let g:showmarks_include="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
 
 map <leader>ss :setlocal spell!<cr>
 
