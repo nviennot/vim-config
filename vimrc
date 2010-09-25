@@ -40,7 +40,7 @@ set incsearch
 set showmatch
 
 " disable last one highlight
-nmap <LocalLeader>/ :nohlsearch<cr>
+nmap <Leader>/ :nohlsearch<cr>
 
 set diffopt=filler,iwhite       " ignore all whitespace and sync
 
