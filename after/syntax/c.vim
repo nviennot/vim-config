@@ -4,7 +4,7 @@ match Error80 /\%>80v.\+/
 set textwidth=78
 
 syn keyword cOperator likely unlikely
-syn keyword cType BUG BUG_ON
+syn keyword cOperator BUG BUG_ON assert_spin_locked might_sleep
 
 syn keyword cRepeat list_for_each list_for_each_entry list_for_each_entry_continue list_for_each_entry_safe __list_for_each list_for_each_prev list_for_each_safe list_for_each_prev_safe list_for_each_entry_reverse list_for_each_entry_continue_reverse list_for_each_entry_from list_for_each_entry_safe_continue list_for_each_entry_safe_from list_for_each_entry_safe_reverse
 syn keyword cRepeat hlist_for_each hlist_for_each_safe hlist_for_each_entry hlist_for_each_entry_continue hlist_for_each_entry_from hlist_for_each_entry_safe

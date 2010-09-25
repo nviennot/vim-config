@@ -131,6 +131,7 @@ endfunction
 let g:showmarks_hlline_lower=1
 let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
 
+let mapleader=","
 map <leader>ss :setlocal spell!<cr>
 
 nmap <leader>l :set list!<CR>
