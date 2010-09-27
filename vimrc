@@ -39,12 +39,9 @@ set hlsearch
 set incsearch
 set showmatch
 
-" disable last one highlight
-nmap <Leader>/ :nohlsearch<cr>
-
 set diffopt=filler,iwhite       " ignore all whitespace and sync
 
-nmap <C-t> :NERDTreeToggle<CR>
+nnoremap <silent> <C-d><C-e> :NERDTreeToggle<cr>
 let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$' ]
 let NERDTreeHighlightCursorline=1
 let NERDTreeShowBookmarks=1
@@ -87,16 +84,16 @@ endfunction
 """"""""""""""""""""""""""""""
 " => Minibuffer plugin
 """"""""""""""""""""""""""""""
-let g:miniBufExplModSelTarget = 1
 let g:miniBufExplorerMoreThanOne = 10000
-let g:miniBufExplModSelTarget = 0
-let g:miniBufExplUseSingleClick = 1
+let g:miniBufExplModSelTarget = 1
 let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplVSplit = 20
 let g:miniBufExplSplitBelow=1
+let g:miniBufExplMapCTabSwitchBufs = 1
+let g:miniBufExplVSplit = 20
 
-map <right> :bn<cr>
-map <left> :bp<cr>
+
+map <M-j> :bn<cr>
+map <M-k> :bp<cr>
 map <C-PageDown> :cnext<cr>
 map <C-PageUp> :cprev<cr>
 
@@ -132,9 +129,14 @@ let g:showmarks_hlline_lower=1
 let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
 
 let mapleader=","
-map <leader>ss :setlocal spell!<cr>
+let localmapleader=","
+map <Leader>ss :setlocal spell!<cr>
+map <Leader>/ :nohlsearch<cr>
+map <Leader>l :MiniBufExplorer<cr>
 
-nmap <leader>l :set list!<CR>
+map <M-[> :tprev<CR>
+map <M-]> :tnext<CR>
+
 set list!
 set listchars=tab:▸\ ,trail:•,extends:»,precedes:«
 
@@ -169,7 +171,6 @@ nnoremap <silent> <C-d><C-l> :FufLine<CR>
 nnoremap <silent> <C-d><C-h> :FufHelp<CR>
 nnoremap <silent> <C-d><C-b> :FufAddBookmark<CR>
 vnoremap <silent> <C-d><C-b> :FufAddBookmarkAsSelectedText<CR>
-nnoremap <silent> <C-d><C-e> :FufEditInfo<CR>
 nnoremap <silent> <C-d><C-r> :FufRenewCache<CR>
 
 
@@ -181,8 +182,8 @@ set directory=~/.vim/swap
 
 set completeopt=menuone
 
-map <F1> :set lines=75<CR>
-map <F2> :set lines=57<CR>:set columns=200<CR>
+map <F1> :set lines=75<CR>:set columns=135<CR>
+map <F2> :set lines=75<CR>:set columns=210<CR>
 
 map <F4> :!touch /home/pafy/www/saimaa/vendor/extensions/saimaa/app/stylesheets/screen.less<CR><CR>
 

@@ -3,9 +3,12 @@ syn match ErrorTailSpace /\s\+$/
 match Error80 /\%>80v.\+/
 set textwidth=78
 
-syn keyword cOperator likely unlikely
+syn keyword cOperator likely unlikely typeof __builtin_constant_p
 syn keyword cOperator BUG BUG_ON assert_spin_locked might_sleep
+syn keyword cStorageClass __attribute__ __always_inline
 
+
+syn keyword cStorageClass __list_add list_add list_add_tail __list_del list_del list_replace list_replace_init list_del_init list_move list_move_tail list_is_last list_empty list_empty_careful list_rotate_left list_is_singular __list_cut_position list_cut_position __list_splice list_splice list_splice_tail list_splice_init list_splice_tail_init list_entry list_first_entry list_prepare_entry list_safe_reset_next hlist_unhashed hlist_empty __hlist_del hlist_del hlist_del_init hlist_add_head hlist_add_before hlist_add_after hlist_move_list hlist_entry
 syn keyword cRepeat list_for_each list_for_each_entry list_for_each_entry_continue list_for_each_entry_safe __list_for_each list_for_each_prev list_for_each_safe list_for_each_prev_safe list_for_each_entry_reverse list_for_each_entry_continue_reverse list_for_each_entry_from list_for_each_entry_safe_continue list_for_each_entry_safe_from list_for_each_entry_safe_reverse
 syn keyword cRepeat hlist_for_each hlist_for_each_safe hlist_for_each_entry hlist_for_each_entry_continue hlist_for_each_entry_from hlist_for_each_entry_safe
 
@@ -15,6 +18,7 @@ syn keyword cPreCondit mutex_lock mutex_unlock
 syn keyword cPreCondit spin_lock spin_unlock spin_lock_irqsave spin_unlock_irqrestore
 syn keyword cPreCondit read_lock read_unlock
 syn keyword cPreCondit rcu_read_lock rcu_read_unlock
+syn keyword cPreCondit atomic_dec_and_lock
 
 syn keyword cPreCondit kmalloc vmalloc kfree vfree
 syn keyword cPreCondit up_write down_write up_read down_read
