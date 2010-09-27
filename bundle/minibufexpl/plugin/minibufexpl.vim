@@ -672,6 +672,7 @@ function! <SID>StartExplorer(sticky, delBufNum)
   " If you press d in the -MiniBufExplorer- then try to
   " delete the selected buffer.
   nnoremap <buffer> d :call <SID>MBEDeleteBuffer()<CR>:<BS>
+  nnoremap <buffer> x :call <SID>MBEDeleteBuffer()<CR>:<BS>
   " If you press w in the -MiniBufExplorer- then switch back
   " to the previous window.
   nnoremap <buffer> p :wincmd p<CR>:<BS>
