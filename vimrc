@@ -41,7 +41,7 @@ set showmatch
 
 set diffopt=filler,iwhite       " ignore all whitespace and sync
 
-nnoremap <silent> <C-d><C-e> :NERDTreeToggle<cr>
+nnoremap <C-g> :NERDTreeToggle<cr>
 let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$' ]
 let NERDTreeHighlightCursorline=1
 let NERDTreeShowBookmarks=1
@@ -177,7 +177,6 @@ nnoremap <silent> <C-d><C-r> :FufRenewCache<CR>
 if filereadable("cscope.out")
     cs add cscope.out
 endif
-nnoremap <C-g> :cscope find 
 set directory=~/.vim/swap
 
 set completeopt=menuone
