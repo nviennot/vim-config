@@ -141,7 +141,7 @@ set list!
 set listchars=tab:▸\ ,trail:•,extends:»,precedes:«
 
 vnoremap . :normal .<CR>
-vnoremap @ :normal @
+vnoremap @ :normal! @
 map <silent> <C-u> :YRShow<CR>
 
 set undolevels=10000

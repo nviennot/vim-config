@@ -4,8 +4,8 @@ match Error80 /\%>80v.\+/
 set textwidth=78
 
 syn keyword cOperator likely unlikely typeof __builtin_constant_p
-syn keyword cOperator BUG BUG_ON assert_spin_locked might_sleep
-syn keyword cStorageClass __attribute__ __always_inline
+syn keyword cOperator BUG BUG_ON assert_spin_locked might_sleep WARN_ON
+syn keyword cStorageClass __attribute__ __always_inline __user
 
 
 syn keyword cStorageClass __list_add list_add list_add_tail __list_del list_del list_replace list_replace_init list_del_init list_move list_move_tail list_is_last list_empty list_empty_careful list_rotate_left list_is_singular __list_cut_position list_cut_position __list_splice list_splice list_splice_tail list_splice_init list_splice_tail_init list_entry list_first_entry list_prepare_entry list_safe_reset_next hlist_unhashed hlist_empty __hlist_del hlist_del hlist_del_init hlist_add_head hlist_add_before hlist_add_after hlist_move_list hlist_entry
