@@ -12,7 +12,7 @@ syn keyword cStorageClass __list_add list_add list_add_tail __list_del list_del 
 syn keyword cRepeat list_for_each list_for_each_entry list_for_each_entry_continue list_for_each_entry_safe __list_for_each list_for_each_prev list_for_each_safe list_for_each_prev_safe list_for_each_entry_reverse list_for_each_entry_continue_reverse list_for_each_entry_from list_for_each_entry_safe_continue list_for_each_entry_safe_from list_for_each_entry_safe_reverse
 syn keyword cRepeat hlist_for_each hlist_for_each_safe hlist_for_each_entry hlist_for_each_entry_continue hlist_for_each_entry_from hlist_for_each_entry_safe
 
-syn keyword cType __s8 __u8 __s16 __u16 __s32 __u32 __s64 __u64 s8 u8 s16 u16 s32 u32 s64 u64
+syn keyword cType __s8 __u8 __s16 __u16 __s32 __u32 __s64 __u64 s8 u8 s16 u16 s32 u32 s64 u64 loff_t
 
 syn keyword cPreCondit mutex_lock mutex_unlock
 syn keyword cPreCondit spin_lock spin_unlock spin_lock_irqsave spin_unlock_irqrestore
@@ -20,7 +20,7 @@ syn keyword cPreCondit read_lock read_unlock
 syn keyword cPreCondit rcu_read_lock rcu_read_unlock
 syn keyword cPreCondit atomic_dec_and_lock
 
-syn keyword cPreCondit kmalloc vmalloc kfree vfree
+syn keyword cPreCondit kmalloc vmalloc kfree vfree kzalloc __get_free_pages
 syn keyword cPreCondit up_write down_write up_read down_read
 
 syn keyword cConstant GFP_ZONEMASK GFP_NOWAIT GFP_ATOMIC GFP_NOIO GFP_NOFS GFP_KERNEL GFP_TEMPORARY GFP_USER GFP_HIGHUSER GFP_HIGHUSER_MOVABLE GFP_IOFS GFP_THISNODE GFP_THISNODE GFP_MOVABLE_MASK GFP_RECLAIM_MASK GFP_BOOT_MASK GFP_CONSTRAINT_MASK GFP_SLAB_BUG_MASK GFP_DMA GFP_DMA32 GFP_ZONE_TABLE GFP_ZONE_BAD
