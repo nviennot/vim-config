@@ -22,7 +22,7 @@ syn keyword cPreCondit read_lock read_unlock
 syn keyword cPreCondit rcu_read_lock rcu_read_unlock
 syn keyword cPreCondit atomic_dec_and_lock
 
-syn keyword cPreCondit kmalloc vmalloc kfree vfree kzalloc __get_free_pages
+syn keyword cPreCondit kmalloc vmalloc kfree vfree kzalloc __get_free_pages kmem_cache_alloc kmem_cache_free
 syn keyword cPreCondit up_write down_write up_read down_read
 
 syn keyword cConstant GFP_ZONEMASK GFP_NOWAIT GFP_ATOMIC GFP_NOIO GFP_NOFS GFP_KERNEL GFP_TEMPORARY GFP_USER GFP_HIGHUSER GFP_HIGHUSER_MOVABLE GFP_IOFS GFP_THISNODE GFP_THISNODE GFP_MOVABLE_MASK GFP_RECLAIM_MASK GFP_BOOT_MASK GFP_CONSTRAINT_MASK GFP_SLAB_BUG_MASK GFP_DMA GFP_DMA32 GFP_ZONE_TABLE GFP_ZONE_BAD
