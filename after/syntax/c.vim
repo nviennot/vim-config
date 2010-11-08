@@ -16,7 +16,7 @@ syn keyword cRepeat __list_for_each_rcu list_for_each_entry_rcu list_for_each_co
 
 syn keyword cType __s8 __u8 __s16 __u16 __s32 __u32 __s64 __u64 s8 u8 s16 u16 s32 u32 s64 u64 loff_t
 
-syn keyword cPreCondit mutex_lock mutex_unlock
+syn keyword cPreCondit mutex_lock mutex_lock_nested mutex_unlock
 syn keyword cPreCondit spin_lock spin_unlock spin_lock_irqsave spin_unlock_irqrestore
 syn keyword cPreCondit read_lock read_unlock
 syn keyword cPreCondit rcu_read_lock rcu_read_unlock
@@ -25,7 +25,11 @@ syn keyword cPreCondit atomic_dec_and_lock
 syn keyword cPreCondit kmalloc vmalloc kfree vfree kzalloc __get_free_pages kmem_cache_alloc kmem_cache_free
 syn keyword cPreCondit up_write down_write up_read down_read
 
+syn keyword cPreCondit rcu_synchronize schedule schedule_timeout
+
 syn keyword cConstant GFP_ZONEMASK GFP_NOWAIT GFP_ATOMIC GFP_NOIO GFP_NOFS GFP_KERNEL GFP_TEMPORARY GFP_USER GFP_HIGHUSER GFP_HIGHUSER_MOVABLE GFP_IOFS GFP_THISNODE GFP_THISNODE GFP_MOVABLE_MASK GFP_RECLAIM_MASK GFP_BOOT_MASK GFP_CONSTRAINT_MASK GFP_SLAB_BUG_MASK GFP_DMA GFP_DMA32 GFP_ZONE_TABLE GFP_ZONE_BAD
+
+syn keyword cConstant ERESTARTSYS ERESTARTNOINTR ERESTARTNOHAND ENOIOCTLCMD ERESTART_RESTARTBLOCK
 
 set nofoldenable
 set foldmethod=syntax
