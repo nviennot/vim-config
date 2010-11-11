@@ -25,7 +25,7 @@ syn keyword cPreCondit atomic_dec_and_lock
 syn keyword cPreCondit scribe_resource_lock_inode scribe_resource_lock_files scribe_resource_unlock scribe_resource_unlock_discard scribe_resource_unlock_may_discard scribe_resource_lock_file scribe_resource_lock_file_only
 
 syn keyword cPreCondit kmalloc vmalloc kfree vfree kzalloc __get_free_pages kmem_cache_alloc kmem_cache_free
-syn keyword cPreCondit up_write down_write up_read down_read
+syn keyword cPreCondit up_write down_write up_read down_read down_read_nested down_write_nested
 
 syn keyword cPreCondit rcu_synchronize schedule schedule_timeout
 
