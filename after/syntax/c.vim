@@ -4,7 +4,7 @@ match Error80 /\%>80v.\+/
 set textwidth=78
 
 syn keyword cOperator likely unlikely typeof __builtin_constant_p
-syn keyword cOperator BUG BUG_ON assert_spin_locked might_sleep WARN_ON
+syn keyword cOperator BUG BUG_ON assert_spin_locked might_sleep WARN_ON WARN
 syn keyword cStorageClass __attribute__ __always_inline __user
 
 
@@ -33,7 +33,7 @@ syn keyword cPreCondit rcu_synchronize schedule schedule_timeout
 
 syn keyword cConstant GFP_ZONEMASK GFP_NOWAIT GFP_ATOMIC GFP_NOIO GFP_NOFS GFP_KERNEL GFP_TEMPORARY GFP_USER GFP_HIGHUSER GFP_HIGHUSER_MOVABLE GFP_IOFS GFP_THISNODE GFP_THISNODE GFP_MOVABLE_MASK GFP_RECLAIM_MASK GFP_BOOT_MASK GFP_CONSTRAINT_MASK GFP_SLAB_BUG_MASK GFP_DMA GFP_DMA32 GFP_ZONE_TABLE GFP_ZONE_BAD
 
-syn keyword cConstant ERESTARTSYS ERESTARTNOINTR ERESTARTNOHAND ENOIOCTLCMD ERESTART_RESTARTBLOCK
+syn keyword cConstant ERESTARTSYS ERESTARTNOINTR ERESTARTNOHAND ENOIOCTLCMD ERESTART_RESTARTBLOCK EDIVERGE
 
 set nofoldenable
 set foldmethod=syntax
