@@ -174,9 +174,9 @@ vnoremap <silent> <C-d><C-b> :FufAddBookmarkAsSelectedText<CR>
 nnoremap <silent> <C-d><C-r> :FufRenewCache<CR>
 
 
-if filereadable("cscope.out")
-    cs add cscope.out
-endif
+"if filereadable("cscope.out")
+    "cs add cscope.out
+"endif
 set directory=~/.vim/swap
 
 set completeopt=menuone
