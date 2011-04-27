@@ -49,3 +49,6 @@
 [submodule "autoload/afterimage"]
 	path = autoload/afterimage
 	url = git://github.com/tpope/vim-afterimage.git
+[submodule "bundle/tabular"]
+	path = bundle/tabular
+	url = git://github.com/godlygeek/tabular
