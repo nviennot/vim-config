@@ -52,3 +52,6 @@
 [submodule "bundle/tabular"]
 	path = bundle/tabular
 	url = git://github.com/godlygeek/tabular
+[submodule "bundle/snipmate"]
+	path = bundle/snipmate
+	url = git://github.com/nviennot/snipmate.vim.git
