@@ -186,6 +186,4 @@ set completeopt=menuone
 map <F1> :set lines=75<CR>:set columns=135<CR>
 map <F2> :set lines=75<CR>:set columns=210<CR>
 
-map <F4> :!touch /home/pafy/www/saimaa/vendor/extensions/saimaa/app/stylesheets/screen.less<CR><CR>
-
-nnoremap ; :
+let g:syntastic_enable_signs=1
