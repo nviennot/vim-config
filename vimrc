@@ -187,3 +187,4 @@ map <F1> :set lines=75<CR>:set columns=135<CR>
 map <F2> :set lines=75<CR>:set columns=210<CR>
 
 let g:syntastic_enable_signs=1
+nnoremap <F5> :GundoToggle<CR>
