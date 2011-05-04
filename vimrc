@@ -127,9 +127,6 @@ exe "bd!".todelbufNr
 endfunction
 """"""""""""""""""""""""""""""""""""""""
 
-let g:showmarks_hlline_lower=1
-let g:showmarks_include="abcdefghijklmnopqrstuvwxyz"
-
 let mapleader=","
 let localmapleader=","
 map <Leader>ss :setlocal spell!<cr>
@@ -186,5 +183,8 @@ set completeopt=menuone
 map <F1> :set lines=75<CR>:set columns=135<CR>
 map <F2> :set lines=75<CR>:set columns=210<CR>
 
-let g:syntastic_enable_signs=1
 nnoremap <F5> :GundoToggle<CR>
+
+let g:syntastic_auto_loc_list=1
+let g:syntastic_disabled_filetypes=['c']
+let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
