@@ -186,7 +186,6 @@ map <F2> :set lines=75<CR>:set columns=210<CR>
 nnoremap <F5> :GundoToggle<CR>
 
 let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=1
 let g:syntastic_disabled_filetypes=['c']
 
 let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
