@@ -8,6 +8,8 @@ filetype plugin indent on
 
 if $TERM =~ '256color'
   set t_Co=256
+elseif $TERM =~ '^xterm$'
+  set t_Co=256
 endif
 
 set cursorline
