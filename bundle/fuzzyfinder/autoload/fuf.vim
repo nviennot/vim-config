@@ -4,7 +4,7 @@
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 100)
+if !l9#guardScriptLoading(expand('<sfile>:p'), 0, 0, [])
   finish
 endif
 
@@ -13,9 +13,17 @@ endif
 " GLOBAL FUNCTIONS {{{1
 
 
+" returns list of paths.
+" An argument for glob() is normalized in order to avoid a bug on Windows.
+function fuf#glob(expr)
+  " Substitutes "\", because on Windows, "**\" doesn't include ".\",
+  " but "**/" include "./". I don't know why.
+  return split(glob(substitute(a:expr, '\', '/', 'g')), "\n")
+endfunction
+
 "
 function fuf#countModifiedFiles(files, time)
-  return len(filter(copy(a:files), 'getftime(v:val) > a:time'))
+  return len(filter(copy(a:files), 'getftime(expand(v:val)) > a:time'))
 endfunction
 
 "
@@ -36,7 +44,9 @@ function fuf#updateMruList(mrulist, newItem, maxItem, exclude)
   let result = copy(a:mrulist)
   let result = filter(result,'v:val.word !=# a:newItem.word')
   let result = insert(result, a:newItem)
-  let result = filter(result, 'v:val.word !~ a:exclude')
+  if len(a:exclude)
+    let result = filter(result, 'v:val.word !~ a:exclude')
+  endif
   return result[0 : a:maxItem - 1]
 endfunction
 
@@ -62,8 +72,8 @@ function fuf#expandTailDotSequenceToParentDir(pattern)
 endfunction
 
 "
-function fuf#formatPrompt(prompt, partialMatching)
-  let indicator = (a:partialMatching ? '!' : '')
+function fuf#formatPrompt(prompt, partialMatching, otherString)
+  let indicator = escape((a:partialMatching ? '!' : '') . a:otherString, '\')
   return substitute(a:prompt, '[]', indicator, 'g')
 endfunction
 
@@ -74,11 +84,7 @@ function fuf#getFileLines(file)
   if !empty(lines)
     return lines
   endif
-  try
-    return readfile(expand(a:file))
-  catch /.*/ 
-  endtry
-  return []
+  return l9#readFile(a:file)
 endfunction
 
 "
@@ -117,7 +123,12 @@ endfunction
 
 "
 function fuf#echoWarning(msg)
-  call l9#echoHl('WarningMsg', a:msg, '[FuzzyFinder] ', 1)
+  call l9#echoHl('WarningMsg', a:msg, '[fuf] ', 1)
+endfunction
+
+"
+function fuf#echoError(msg)
+  call l9#echoHl('ErrorMsg', a:msg, '[fuf] ', 1)
 endfunction
 
 "
@@ -200,7 +211,7 @@ endfunction
 "
 function fuf#makePathItem(fname, menu, appendsDirSuffix)
   let pathPair = fuf#splitPath(a:fname)
-  let dirSuffix = (a:appendsDirSuffix && isdirectory(a:fname)
+  let dirSuffix = (a:appendsDirSuffix && isdirectory(expand(a:fname))
         \          ? l9#getPathSeparator()
         \          : '')
   return {
@@ -245,11 +256,7 @@ endfunction
 
 "
 function fuf#enumExpandedDirsEntries(dir, exclude)
-  " Substitutes "\" because on Windows, "**\" doesn't include ".\",
-  " but "**/" include "./". I don't know why.
-  let dirNormalized = substitute(a:dir, '\', '/', 'g')
-  let entries = split(glob(dirNormalized . "*" ), "\n") +
-        \       split(glob(dirNormalized . ".*"), "\n")
+  let entries = fuf#glob(a:dir . '*') + fuf#glob(a:dir . '.*')
   " removes "*/." and "*/.."
   call filter(entries, 'v:val !~ ''\v(^|[/\\])\.\.?$''')
   call map(entries, 'fuf#makePathItem(v:val, "", 1)')
@@ -281,17 +288,56 @@ function fuf#setAbbrWithFormattedWord(item, abbrIndex)
 endfunction
 
 "
-function fuf#defineLaunchCommand(CmdName, modeName, prefixInitialPattern)
-  execute printf('command! -bang -narg=? %s call fuf#launch(%s, %s . <q-args>, len(<q-bang>))',
-        \        a:CmdName, string(a:modeName), a:prefixInitialPattern)
+function s:onCommandPre()
+  for m in filter(copy(fuf#getModeNames()), 'fuf#{v:val}#requiresOnCommandPre()')
+      call fuf#{m}#onCommandPre(getcmdtype() . getcmdline())
+  endfor
+  " lets last entry become the newest in the history
+  call histadd(getcmdtype(), getcmdline())
+  " this is not mapped again (:help recursive_mapping)
+  return "\<CR>"
+endfunction
+
+"
+let s:modeNames = []
+
+"
+function fuf#addMode(modeName)
+  if count(g:fuf_modesDisable, a:modeName) > 0
+    return
+  endif
+  call add(s:modeNames, a:modeName)
+  call fuf#{a:modeName}#renewCache()
+  call fuf#{a:modeName}#onInit()
+  if fuf#{a:modeName}#requiresOnCommandPre()
+    " cnoremap has a problem, which doesn't expand cabbrev.
+    cmap <silent> <expr> <CR> <SID>onCommandPre()
+  endif
+endfunction
+
+"
+function fuf#getModeNames()
+  return s:modeNames
+endfunction
+
+"
+function fuf#defineLaunchCommand(CmdName, modeName, prefixInitialPattern, tempVars)
+  if empty(a:tempVars)
+    let preCmd = ''
+  else
+    let preCmd = printf('call l9#tempvariables#setList(%s, %s) | ',
+          \             string(s:TEMP_VARIABLES_GROUP), string(a:tempVars))
+  endif
+  execute printf('command! -range -bang -narg=? %s %s call fuf#launch(%s, %s . <q-args>, len(<q-bang>))',
+        \        a:CmdName, preCmd, string(a:modeName), a:prefixInitialPattern)
 endfunction
 
 "
 function fuf#defineKeyMappingInHandler(key, func)
-    " hacks to be able to use feedkeys().
-    execute printf(
-          \ 'inoremap <buffer> <silent> %s <C-r>=fuf#getRunningHandler().%s ? "" : ""<CR>',
-          \ a:key, a:func)
+  " hacks to be able to use feedkeys().
+  execute printf(
+        \ 'inoremap <buffer> <silent> %s <C-r>=fuf#getRunningHandler().%s ? "" : ""<CR>',
+        \ a:key, a:func)
 endfunction
 
 "
@@ -307,19 +353,25 @@ function fuf#launch(modeName, initialPattern, partialMatching)
   if exists('s:runningHandler')
     call fuf#echoWarning('FuzzyFinder is running.')
   endif
-  if count(g:fuf_modes, a:modeName) == 0
+  if count(fuf#getModeNames(), a:modeName) == 0
     echoerr 'This mode is not available: ' . a:modeName
     return
   endif
   let s:runningHandler = fuf#{a:modeName}#createHandler(copy(s:handlerBase))
-  let s:runningHandler.info = fuf#loadInfoFile(s:runningHandler.getModeName())
+  let s:runningHandler.stats = fuf#loadDataFile(s:runningHandler.getModeName(), 'stats')
   let s:runningHandler.partialMatching = a:partialMatching
   let s:runningHandler.bufNrPrev = bufnr('%')
   let s:runningHandler.lastCol = -1
+  let s:runningHandler.windowRestoringCommand = winrestcmd()
   call s:runningHandler.onModeEnterPre()
+  " NOTE: updatetime is set, because in Buffer-Tag mode on Vim 7.3 on Windows,
+  " Vim keeps from triggering CursorMovedI for updatetime after system() is
+  " called. I don't know why.
   call fuf#setOneTimeVariables(
-        \ ['&completeopt', 'menuone'],
-        \ ['&ignorecase', 0],)
+        \  ['&completeopt', 'menuone'],
+        \  ['&ignorecase', 0],
+        \  ['&updatetime', 10],
+        \ )
   if s:runningHandler.getPreviewHeight() > 0
     call fuf#setOneTimeVariables(
           \ ['&cmdheight', s:runningHandler.getPreviewHeight() + 1])
@@ -333,18 +385,19 @@ function fuf#launch(modeName, initialPattern, partialMatching)
     autocmd InsertLeave  <buffer> nested call s:runningHandler.onInsertLeave()
   augroup END
   for [key, func] in [
-        \   [ g:fuf_keyOpen          , 'onCr(' . s:OPEN_TYPE_CURRENT . ', 0)' ],
-        \   [ g:fuf_keyOpenSplit     , 'onCr(' . s:OPEN_TYPE_SPLIT   . ', 0)' ],
-        \   [ g:fuf_keyOpenVsplit    , 'onCr(' . s:OPEN_TYPE_VSPLIT  . ', 0)' ],
-        \   [ g:fuf_keyOpenTabpage   , 'onCr(' . s:OPEN_TYPE_TAB     . ', 0)' ],
-        \   [ '<BS>'                 , 'onBs()'                               ],
-        \   [ '<C-h>'                , 'onBs()'                               ],
-        \   [ g:fuf_keyPreview       , 'onPreviewBase(1)'                     ],
-        \   [ g:fuf_keyNextMode      , 'onSwitchMode(+1)'                     ],
-        \   [ g:fuf_keyPrevMode      , 'onSwitchMode(-1)'                     ],
-        \   [ g:fuf_keySwitchMatching, 'onSwitchMatching()'                   ],
-        \   [ g:fuf_keyPrevPattern   , 'onRecallPattern(+1)'                  ],
-        \   [ g:fuf_keyNextPattern   , 'onRecallPattern(-1)'                  ],
+        \   [ g:fuf_keyOpen          , 'onCr(' . s:OPEN_TYPE_CURRENT . ')' ],
+        \   [ g:fuf_keyOpenSplit     , 'onCr(' . s:OPEN_TYPE_SPLIT   . ')' ],
+        \   [ g:fuf_keyOpenVsplit    , 'onCr(' . s:OPEN_TYPE_VSPLIT  . ')' ],
+        \   [ g:fuf_keyOpenTabpage   , 'onCr(' . s:OPEN_TYPE_TAB     . ')' ],
+        \   [ '<BS>'                 , 'onBs()'                            ],
+        \   [ '<C-h>'                , 'onBs()'                            ],
+        \   [ '<C-w>'                , 'onDeleteWord()'                    ],
+        \   [ g:fuf_keyPreview       , 'onPreviewBase(1)'                  ],
+        \   [ g:fuf_keyNextMode      , 'onSwitchMode(+1)'                  ],
+        \   [ g:fuf_keyPrevMode      , 'onSwitchMode(-1)'                  ],
+        \   [ g:fuf_keySwitchMatching, 'onSwitchMatching()'                ],
+        \   [ g:fuf_keyPrevPattern   , 'onRecallPattern(+1)'               ],
+        \   [ g:fuf_keyNextPattern   , 'onRecallPattern(-1)'               ],
         \ ]
     call fuf#defineKeyMappingInHandler(key, func)
   endfor
@@ -357,44 +410,72 @@ function fuf#launch(modeName, initialPattern, partialMatching)
 endfunction
 
 "
-function fuf#loadInfoFile(modeName)
-  try
-    let lines = readfile(expand(g:fuf_infoFile))
-    " compatibility check
-    if count(lines, s:INFO_FILE_VERSION_LINE) == 0
-      call s:warnOldInfoFile()
-      let g:fuf_infoFile = ''
-      throw 1
-    endif
-  catch /.*/ 
-    let lines = []
-  endtry
-  let s:lastInfoMap = s:deserializeInfoMap(lines)
-  if !exists('s:lastInfoMap[a:modeName]')
-    let s:lastInfoMap[a:modeName] = {}
+function fuf#loadDataFile(modeName, dataName)
+  if !s:dataFileAvailable
+    return []
   endif
-  return extend(s:lastInfoMap[a:modeName], { 'data': [], 'stats': [] }, 'keep')
+  let lines = l9#readFile(l9#concatPaths([g:fuf_dataDir, a:modeName, a:dataName]))
+  return map(lines, 'eval(v:val)')
 endfunction
 
-" if a:modeName is empty, a:info is treated as a map of information
-function fuf#saveInfoFile(modeName, info)
-  if empty(a:modeName)
-    let s:lastInfoMap = a:info
-  else
-    let s:lastInfoMap[a:modeName] = a:info
+" 
+function fuf#saveDataFile(modeName, dataName, items)
+  if !s:dataFileAvailable
+    return -1
   endif
-  let lines = [ s:INFO_FILE_VERSION_LINE ] + s:serializeInfoMap(s:lastInfoMap)
-  try
-    call writefile(lines, expand(g:fuf_infoFile))
-  catch /.*/ 
-  endtry
+  let lines = map(copy(a:items), 'string(v:val)')
+  return l9#writeFile(lines, l9#concatPaths([g:fuf_dataDir, a:modeName, a:dataName]))
+endfunction
+
+" 
+function fuf#getDataFileTime(modeName, dataName)
+  if !s:dataFileAvailable
+    return -1
+  endif
+  return getftime(expand(l9#concatPaths([g:fuf_dataDir, a:modeName, a:dataName])))
 endfunction
 
 "
-function fuf#editInfoFile()
-  let lines = readfile(expand(g:fuf_infoFile))
-  call l9#tempbuffer#open('[fuf-info]', 'vim', lines, 0, 0, 0, 1,
-        \                 s:infoBufferListener)
+function s:createDataBufferListener(dataFile)
+  let listener = { 'dataFile': a:dataFile }
+
+  function listener.onWrite(lines)
+    let [modeName, dataName] = split(self.dataFile, l9#getPathSeparator())
+    let items = map(filter(a:lines, '!empty(v:val)'), 'eval(v:val)')
+    call fuf#saveDataFile(modeName, dataName, items)
+    echo "Data files updated"
+    return 1
+  endfunction
+
+  return listener
+endfunction
+
+"
+function s:createEditDataListener()
+  let listener = {}
+
+  function listener.onComplete(dataFile, method)
+    let bufName = '[fuf-info]'
+    let lines = l9#readFile(l9#concatPaths([g:fuf_dataDir, a:dataFile]))
+    call l9#tempbuffer#openWritable(bufName, 'vim', lines, 0, 0, 0,
+          \                         s:createDataBufferListener(a:dataFile))
+  endfunction
+
+  return listener
+endfunction
+
+"
+function s:getEditableDataFiles(modeName)
+  let dataFiles = fuf#{a:modeName}#getEditableDataNames()
+  call filter(dataFiles, 'fuf#getDataFileTime(a:modeName, v:val) != -1')
+  return map(dataFiles, 'l9#concatPaths([a:modeName, v:val])')
+endfunction
+
+"
+function fuf#editDataFile()
+  let dataFiles = map(copy(fuf#getModeNames()), 's:getEditableDataFiles(v:val)')
+  let dataFiles = l9#concat(dataFiles)
+  call fuf#callbackitem#launch('', 0, '>Mode>', s:createEditDataListener(), dataFiles, 0)
 endfunction
 
 " 
@@ -411,8 +492,7 @@ endfunction
 "=============================================================================
 " LOCAL FUNCTIONS/VARIABLES {{{1
 
-let s:INFO_FILE_VERSION_LINE = "VERSION\t300"
-let s:TEMP_VARIABLES_GROUP = "FuzzyFinder"
+let s:TEMP_VARIABLES_GROUP = expand('<sfile>:p')
 let s:ABBR_SNIP_MASK = '...'
 let s:OPEN_TYPE_CURRENT = 1
 let s:OPEN_TYPE_SPLIT   = 2
@@ -445,7 +525,11 @@ endfunction
 
 " 
 function s:makeRefiningExpr(pattern)
-  let expr = s:makePartialMatchingExpr('v:val.wordForRefining', a:pattern)
+  if g:fuf_fuzzyRefining
+    let expr = s:makeFuzzyMatchingExpr('v:val.wordForRefining', a:pattern)
+  else
+    let expr = s:makePartialMatchingExpr('v:val.wordForRefining', a:pattern)
+  endif
   if a:pattern =~# '\D'
     return expr
   else
@@ -479,9 +563,9 @@ function s:interpretPrimaryPatternForPath(pattern)
   let pairL = fuf#splitPath(patternL)
   if g:fuf_splitPathMatching
     let matches = [
-        \     ['v:val.wordForPrimaryHead', pairL.head],
-        \     ['v:val.wordForPrimaryTail', pairL.tail],
-        \   ]
+          \     ['v:val.wordForPrimaryHead', pairL.head],
+          \     ['v:val.wordForPrimaryTail', pairL.tail],
+          \   ]
   else
     let matches = [
           \     ['v:val.wordForPrimaryHead . v:val.wordForPrimaryTail', patternL],
@@ -511,7 +595,7 @@ endfunction
 
 "
 function s:toLowerForIgnoringCase(str)
-    return (g:fuf_ignoreCase ? tolower(a:str) : a:str)
+  return (g:fuf_ignoreCase ? tolower(a:str) : a:str)
 endfunction
 
 "
@@ -540,31 +624,31 @@ endfunction
 " range of return value is [0.0, 1.0]
 function s:scoreSequentialMatching(word, pattern)
   if empty(a:pattern)
-    return 0.0
+    return str2float('0.0')
   endif
   let pos = stridx(a:word, a:pattern)
   if pos < 0
-    return 0.0
+    return str2float('0.0')
   endif
   let lenRest = len(a:word) - len(a:pattern) - pos
-  return (pos == 0 ? 0.5 : 0.0) + 0.5 / (lenRest + 1)
+  return str2float(pos == 0 ? '0.5' : '0.0') + str2float('0.5') / (lenRest + 1)
 endfunction
 
 " range of return value is [0.0, 1.0]
 function s:scoreBoundaryMatching(wordForBoundary, pattern, exprBoundary)
   if empty(a:pattern)
-    return 0.0
+    return str2float('0.0')
   endif
   if !eval(a:exprBoundary)
     return 0
   endif
-  return 0.5 + 0.5 * s:scoreSequentialMatching(a:wordForBoundary, a:pattern)
+  return (s:scoreSequentialMatching(a:wordForBoundary, a:pattern) + 1) / 2
 endfunction
 
 "
 function s:highlightPrompt(prompt)
   syntax clear
-  execute printf('syntax match %s /^\V%s/', g:fuf_promptHighlight, escape(a:prompt, '\'))
+  execute printf('syntax match %s /^\V%s/', g:fuf_promptHighlight, escape(a:prompt, '\/'))
 endfunction
 
 "
@@ -626,10 +710,10 @@ function s:activateFufBuffer()
   "         if 'autochdir' was set on.
   lcd .
   let cwd = getcwd()
-  call l9#tempbuffer#open(s:FUF_BUF_NAME, 'fuf', [], 1, 0, 1, 1, {})
+  call l9#tempbuffer#openScratch(s:FUF_BUF_NAME, 'fuf', [], 1, 0, 1, {})
+  resize 1 " for issue #21 
   " lcd ... : countermeasure against auto-cd script
   lcd `=cwd`
-  setlocal buftype=nofile
   setlocal nocursorline   " for highlighting
   setlocal nocursorcolumn " for highlighting
   setlocal omnifunc=fuf#onComplete
@@ -651,44 +735,6 @@ function s:deactivateFufBuffer()
   call l9#tempbuffer#close(s:FUF_BUF_NAME)
 endfunction
 
-"
-function s:warnOldInfoFile()
-  call fuf#echoWarning(printf(
-        \ "=================================================================\n" .
-        \ "  Sorry, but your information file for FuzzyFinder is no longer  \n" .
-        \ "  compatible with this version of FuzzyFinder. Please remove     \n" .
-        \ "  %-63s\n" .
-        \ "=================================================================\n" ,
-        \ '"' . expand(g:fuf_infoFile) . '".'))
-  call l9#inputHl('Question', 'Press Enter')
-endfunction
-
-"
-function s:serializeInfoMap(infoMap)
-  let lines = []
-  for [m, info] in items(a:infoMap)
-    for [key, value] in items(info)
-      let lines += map(copy(value), 'm . "\t" . key . "\t" . string(v:val)')
-    endfor
-  endfor
-  return lines
-endfunction
-
-"
-function s:deserializeInfoMap(lines)
-  let infoMap = {}
-  for e in filter(map(a:lines, 'matchlist(v:val, ''^\v(\S+)\s+(\S+)\s+(.+)$'')'), '!empty(v:val)')
-    if !exists('infoMap[e[1]]')
-      let infoMap[e[1]] = {}
-    endif
-    if !exists('infoMap[e[1]][e[2]]')
-      let infoMap[e[1]][e[2]] = []
-    endif
-    call add(infoMap[e[1]][e[2]], eval(e[3]))
-  endfor
-  return infoMap
-endfunction
-
 " }}}1
 "=============================================================================
 " s:handlerBase {{{1
@@ -704,9 +750,6 @@ let s:handlerBase = {}
 " "
 " s:handler.getPrompt()
 " 
-" " returns true if the mode deals with file paths.
-" s:handler.targetsPath()
-"
 " "
 " s:handler.getCompleteItems(patternSet)
 " 
@@ -734,9 +777,9 @@ endfunction
 "
 function s:handlerBase.addStat(pattern, word)
   let stat = { 'pattern' : a:pattern, 'word' : a:word }
-  call filter(self.info.stats, 'v:val !=# stat')
-  call insert(self.info.stats, stat)
-  let self.info.stats = self.info.stats[0 : g:fuf_learningLimit - 1]
+  call filter(self.stats, 'v:val !=# stat')
+  call insert(self.stats, stat)
+  let self.stats = self.stats[0 : g:fuf_learningLimit - 1]
 endfunction
 
 "
@@ -747,7 +790,7 @@ function s:handlerBase.getMatchingCompleteItems(patternBase)
   let patternSet = self.makePatternSet(a:patternBase)
   let exprBoundary = s:makeFuzzyMatchingExpr('a:wordForBoundary', patternSet.primaryForRank)
   let stats = filter(
-        \ copy(self.info.stats), 'v:val.pattern ==# patternSet.primaryForRank')
+        \ copy(self.stats), 'v:val.pattern ==# patternSet.primaryForRank')
   let items = self.getCompleteItems(patternSet.primary)
   " NOTE: In order to know an excess, plus 1 to limit number
   let items = l9#filterWithLimit(
@@ -756,7 +799,6 @@ function s:handlerBase.getMatchingCompleteItems(patternBase)
         \ 's:setRanks(v:val, patternSet.primaryForRank, exprBoundary, stats)')
 endfunction
 
-          "\ 'inoremap <buffer> <silent> %s <C-r>=fuf#getRunningHandler().%s ? "" : ""<CR>',
 "
 function s:handlerBase.onComplete(findstart, base)
   if a:findstart
@@ -827,9 +869,11 @@ endfunction
 "
 function s:handlerBase.onInsertLeave()
   unlet s:runningHandler
-  call l9#tempvariables#swap(s:TEMP_VARIABLES_GROUP)
+  let tempVars = l9#tempvariables#getList(s:TEMP_VARIABLES_GROUP)
+  call l9#tempvariables#end(s:TEMP_VARIABLES_GROUP)
   call s:deactivateFufBuffer()
-  call fuf#saveInfoFile(self.getModeName(), self.info)
+  call fuf#saveDataFile(self.getModeName(), 'stats', self.stats)
+  execute self.windowRestoringCommand
   let fOpen = exists('s:reservedCommand')
   if fOpen
     call self.onOpen(s:reservedCommand[0], s:reservedCommand[1])
@@ -837,24 +881,22 @@ function s:handlerBase.onInsertLeave()
   endif
   call self.onModeLeavePost(fOpen)
   if exists('self.reservedMode')
-    call l9#tempvariables#swap(s:TEMP_VARIABLES_GROUP)
+    call l9#tempvariables#setList(s:TEMP_VARIABLES_GROUP, tempVars)
     call fuf#launch(self.reservedMode, self.lastPattern, self.partialMatching)
-  else
-    call l9#tempvariables#end(s:TEMP_VARIABLES_GROUP)
   endif
 endfunction
 
 "
-function s:handlerBase.onCr(openType, fCheckDir)
+function s:handlerBase.onCr(openType)
   if pumvisible()
-    call feedkeys(printf("\<C-y>\<C-r>=fuf#getRunningHandler().onCr(%d, %d) ? '' : ''\<CR>",
-          \              a:openType, self.targetsPath()), 'n')
+    call feedkeys(printf("\<C-y>\<C-r>=fuf#getRunningHandler().onCr(%d) ? '' : ''\<CR>",
+          \              a:openType), 'n')
     return
   endif
   if !empty(self.lastPattern)
     call self.addStat(self.lastPattern, self.removePrompt(getline('.')))
   endif
-  if a:fCheckDir && getline('.') =~# '[/\\]$'
+  if !self.isOpenable(getline('.'))
     " To clear i_<C-r> expression (fuf#getRunningHandler().onCr...)
     echo ''
     return
@@ -865,19 +907,25 @@ endfunction
 
 "
 function s:handlerBase.onBs()
-  let pattern = self.removePrompt(getline('.')[ : col('.') - 2])
-  if empty(pattern)
-    let numBs = 0
-  elseif !g:fuf_smartBs
-    let numBs = 1
-  elseif pattern[-len(g:fuf_patternSeparator) : ] ==# g:fuf_patternSeparator
-    let numBs = len(split(pattern, g:fuf_patternSeparator, 1)[-2])
-          \   + len(g:fuf_patternSeparator)
-  elseif self.targetsPath() && pattern[-1 : ] =~# '[/\\]'
-    let numBs = len(matchstr(pattern, '[^/\\]*.$'))
-  else
-    let numBs = 1
+  call feedkeys((pumvisible() ? "\<C-e>\<BS>" : "\<BS>"), 'n')
+endfunction
+
+"
+function s:getLastBlockLength(pattern, patternIsPath)
+  let separatorPos = strridx(a:pattern, g:fuf_patternSeparator)
+  if separatorPos >= 0
+    return len(a:pattern) - separatorPos
   endif
+  if a:patternIsPath && a:pattern =~# '[/\\].'
+    return len(matchstr(a:pattern, '[^/\\]*.$'))
+  endif
+  return len(a:pattern)
+endfunction
+
+"
+function s:handlerBase.onDeleteWord()
+  let pattern = self.removePrompt(getline('.')[ : col('.') - 2])
+  let numBs = s:getLastBlockLength(pattern, 1)
   call feedkeys((pumvisible() ? "\<C-e>" : "") . repeat("\<BS>", numBs), 'n')
 endfunction
 
@@ -910,7 +958,7 @@ endfunction
 
 "
 function s:handlerBase.onSwitchMode(shift)
-  let modes = copy(g:fuf_modes)
+  let modes = copy(fuf#getModeNames())
   call map(modes, '{ "ranks": [ fuf#{v:val}#getSwitchOrder(), v:val ] }')
   call filter(modes, 'v:val.ranks[0] >= 0')
   call sort(modes, 'fuf#compareRanks')
@@ -935,7 +983,7 @@ endfunction
 
 "
 function s:handlerBase.onRecallPattern(shift)
-  let patterns = map(copy(self.info.stats), 'v:val.pattern')
+  let patterns = map(copy(self.stats), 'v:val.pattern')
   if !exists('self.indexRecall')
     let self.indexRecall = -1
   endif
@@ -952,21 +1000,6 @@ endfunction
 
 " }}}1
 "=============================================================================
-" s:infoBufferListener {{{1
-
-"
-let s:infoBufferListener = {}
-
-"
-function s:infoBufferListener.onWrite(lines)
-  call fuf#saveInfoFile('', s:deserializeInfoMap(a:lines))
-  echo "Information file updated"
-  return 1
-endfunction
-
-
-" }}}1
-"=============================================================================
 " INITIALIZATION {{{1
 
 augroup FufGlobal
@@ -975,6 +1008,37 @@ augroup FufGlobal
 augroup END
 
 let s:bufferCursorPosMap = {}
+
+"
+let s:DATA_FILE_VERSION = 400
+
+"
+function s:checkDataFileCompatibility()
+  if empty(g:fuf_dataDir)
+    let s:dataFileAvailable = 0
+    return
+  endif
+  let versionPath = l9#concatPaths([g:fuf_dataDir, 'VERSION'])
+  let lines = l9#readFile(versionPath)
+  if empty(lines)
+    call l9#writeFile([s:DATA_FILE_VERSION], versionPath)
+    let s:dataFileAvailable = 1
+  elseif str2nr(lines[0]) == s:DATA_FILE_VERSION
+    let s:dataFileAvailable = 1
+  else
+    call fuf#echoWarning(printf(
+          \ "=======================================================\n" .
+          \ "  Existing data files for FuzzyFinder is no longer     \n" .
+          \ "  compatible with this version of FuzzyFinder. Remove  \n" .
+          \ "  %-53s\n" .
+          \ "=======================================================\n" ,
+          \ string(g:fuf_dataDir)))
+    call l9#inputHl('Question', 'Press Enter')
+    let s:dataFileAvailable = 0
+  endif
+endfunction
+
+call s:checkDataFileCompatibility()
 
 " }}}1
 "=============================================================================

@@ -4,7 +4,7 @@
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 100)
+if !l9#guardScriptLoading(expand('<sfile>:p'), 0, 0, [])
   finish
 endif
 
@@ -23,6 +23,11 @@ function fuf#line#getSwitchOrder()
 endfunction
 
 "
+function fuf#line#getEditableDataNames()
+  return []
+endfunction
+
+"
 function fuf#line#renewCache()
 endfunction
 
@@ -33,7 +38,7 @@ endfunction
 
 "
 function fuf#line#onInit()
-  call fuf#defineLaunchCommand('FufLine', s:MODE_NAME, '""')
+  call fuf#defineLaunchCommand('FufLine', s:MODE_NAME, '""', [])
 endfunction
 
 " }}}1
@@ -56,7 +61,7 @@ endfunction
 
 "
 function s:handler.getPrompt()
-  return fuf#formatPrompt(g:fuf_line_prompt, self.partialMatching)
+  return fuf#formatPrompt(g:fuf_line_prompt, self.partialMatching, '')
 endfunction
 
 "
@@ -65,8 +70,8 @@ function s:handler.getPreviewHeight()
 endfunction
 
 "
-function s:handler.targetsPath()
-  return 0
+function s:handler.isOpenable(enteredPattern)
+  return 1
 endfunction
 
 "

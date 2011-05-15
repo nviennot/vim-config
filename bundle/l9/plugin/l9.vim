@@ -1,11 +1,11 @@
 "=============================================================================
 " Copyright (C) 2009-2010 Takeshi NISHIDA
 "
-" TODO: GetLatestVimScripts
+" GetLatestVimScripts: 3252 1 :AutoInstall: L9
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, l9#getVersion())
+if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 0, [])
   finish
 endif
 
@@ -80,7 +80,7 @@ if $L9_TIMER
   function s:timerDump()
     L9TimerStop
     let lines = map(s:timerData, 'v:val.tag . repeat(" ", s:timerTagMaxLen - len(v:val.tag)) . v:val.time')
-    call l9#tempbuffer#open('[l9-timer]', '', lines, 0, 0, 0, 0, {})
+    call l9#tempbuffer#openReadOnly('[l9-timer]', '', lines, 0, 0, 0, {})
     let s:timerData = []
     let s:timerTagMaxLen = 0
   endfunction

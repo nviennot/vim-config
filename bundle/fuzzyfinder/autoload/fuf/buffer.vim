@@ -4,7 +4,7 @@
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 100)
+if !l9#guardScriptLoading(expand('<sfile>:p'), 0, 0, [])
   finish
 endif
 
@@ -23,6 +23,11 @@ function fuf#buffer#getSwitchOrder()
 endfunction
 
 "
+function fuf#buffer#getEditableDataNames()
+  return []
+endfunction
+
+"
 function fuf#buffer#renewCache()
 endfunction
 
@@ -33,7 +38,7 @@ endfunction
 
 "
 function fuf#buffer#onInit()
-  call fuf#defineLaunchCommand('FufBuffer', s:MODE_NAME, '""')
+  call fuf#defineLaunchCommand('FufBuffer', s:MODE_NAME, '""', [])
   augroup fuf#buffer
     autocmd!
     autocmd BufEnter     * call s:updateBufTimes()
@@ -110,7 +115,7 @@ endfunction
 
 "
 function s:handler.getPrompt()
-  return fuf#formatPrompt(g:fuf_buffer_prompt, self.partialMatching)
+  return fuf#formatPrompt(g:fuf_buffer_prompt, self.partialMatching, '')
 endfunction
 
 "
@@ -119,7 +124,7 @@ function s:handler.getPreviewHeight()
 endfunction
 
 "
-function s:handler.targetsPath()
+function s:handler.isOpenable(enteredPattern)
   return 1
 endfunction
 
@@ -164,7 +169,7 @@ endfunction
 "
 function s:handler.onModeEnterPost()
   call fuf#defineKeyMappingInHandler(g:fuf_buffer_keyDelete,
-        \                            'onCr(' . s:OPEN_TYPE_DELETE . ', 0)')
+        \                            'onCr(' . s:OPEN_TYPE_DELETE . ')')
   let self.items = range(1, bufnr('$'))
   call filter(self.items, 'buflisted(v:val) && v:val != self.bufNrPrev && v:val != bufnr("%")')
   call map(self.items, 's:makeItem(v:val)')

@@ -5,9 +5,14 @@
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 100)
+try
+  if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 101, [])
+    finish
+  endif
+catch /E117/
+  echoerr '***** L9 library must be installed! *****'
   finish
-endif
+endtry
 
 " }}}1
 "=============================================================================
@@ -16,13 +21,6 @@ endif
 "
 function s:initialize()
   "---------------------------------------------------------------------------
-  call l9#defineVariableDefault('g:fuf_modes'  , [
-        \   'buffer', 'file', 'dir', 'mrufile', 'mrucmd',
-        \   'bookmark', 'tag', 'taggedfile',
-        \   'jumplist', 'changelist', 'quickfix', 'line', 'help',
-        \   'givenfile', 'givendir', 'givencmd',
-        \   'callbackfile', 'callbackitem',
-        \ ])
   call l9#defineVariableDefault('g:fuf_modesDisable'     , [ 'mrufile', 'mrucmd', ])
   call l9#defineVariableDefault('g:fuf_keyOpen'          , '<CR>')
   call l9#defineVariableDefault('g:fuf_keyOpenSplit'     , '<C-j>')
@@ -34,20 +32,21 @@ function s:initialize()
   call l9#defineVariableDefault('g:fuf_keyPrevPattern'   , '<C-s>')
   call l9#defineVariableDefault('g:fuf_keyNextPattern'   , '<C-_>')
   call l9#defineVariableDefault('g:fuf_keySwitchMatching', '<C-\><C-\>')
-  call l9#defineVariableDefault('g:fuf_infoFile'         , '~/.vim-fuf')
+  call l9#defineVariableDefault('g:fuf_dataDir'          , '~/.vim-fuf-data')
   call l9#defineVariableDefault('g:fuf_abbrevMap'        , {})
   call l9#defineVariableDefault('g:fuf_patternSeparator' , ';')
   call l9#defineVariableDefault('g:fuf_promptHighlight'  , 'Question')
   call l9#defineVariableDefault('g:fuf_ignoreCase'       , 1)
   call l9#defineVariableDefault('g:fuf_splitPathMatching', 1)
+  call l9#defineVariableDefault('g:fuf_fuzzyRefining'    , 0)
   call l9#defineVariableDefault('g:fuf_smartBs'          , 1)
   call l9#defineVariableDefault('g:fuf_reuseWindow'      , 1)
   call l9#defineVariableDefault('g:fuf_timeFormat'       , '(%Y-%m-%d %H:%M:%S)')
   call l9#defineVariableDefault('g:fuf_learningLimit'    , 100)
   call l9#defineVariableDefault('g:fuf_enumeratingLimit' , 50)
   call l9#defineVariableDefault('g:fuf_maxMenuWidth'     , 78)
-  call l9#defineVariableDefault('g:fuf_previewHeight'    , 10)
-  call l9#defineVariableDefault('g:fuf_autoPreview'      , 1)
+  call l9#defineVariableDefault('g:fuf_previewHeight'    , 0)
+  call l9#defineVariableDefault('g:fuf_autoPreview'      , 0)
   call l9#defineVariableDefault('g:fuf_useMigemo'        , 0)
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_buffer_prompt'     , '>Buffer[]>')
@@ -57,104 +56,95 @@ function s:initialize()
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_file_prompt'     , '>File[]>')
   call l9#defineVariableDefault('g:fuf_file_switchOrder', 20)
-  call l9#defineVariableDefault('g:fuf_file_exclude'    , '\v\~$|\.(o|exe|dll|bak|sw[po])$|(^|[/\\])\.(hg|git|bzr)($|[/\\])')
+  call l9#defineVariableDefault('g:fuf_file_exclude'    , '\v\~$|\.(o|exe|dll|bak|orig|sw[po])$|(^|[/\\])\.(hg|git|bzr)($|[/\\])')
+  "---------------------------------------------------------------------------
+  call l9#defineVariableDefault('g:fuf_coveragefile_prompt'     , '>CoverageFile[]>')
+  call l9#defineVariableDefault('g:fuf_coveragefile_switchOrder', 30)
+  call l9#defineVariableDefault('g:fuf_coveragefile_exclude'    , '\v\~$|\.(o|exe|dll|bak|orig|sw[po])$|(^|[/\\])\.(hg|git|bzr)($|[/\\])')
+  call l9#defineVariableDefault('g:fuf_coveragefile_globPatterns', ['**/.*', '**/*'])
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_dir_prompt'     , '>Dir[]>')
-  call l9#defineVariableDefault('g:fuf_dir_switchOrder', 30)
+  call l9#defineVariableDefault('g:fuf_dir_switchOrder', 40)
   call l9#defineVariableDefault('g:fuf_dir_exclude'    , '\v(^|[/\\])\.(hg|git|bzr)($|[/\\])')
   "---------------------------------------------------------------------------
-  call l9#defineVariableDefault('g:fuf_mrufile_prompt'     , '>Mru-File[]>')
-  call l9#defineVariableDefault('g:fuf_mrufile_switchOrder', 40)
-  call l9#defineVariableDefault('g:fuf_mrufile_exclude'    , '\v\~$|\.(bak|sw[po])$|^(\/\/|\\\\|\/mnt\/|\/media\/)')
+  call l9#defineVariableDefault('g:fuf_mrufile_prompt'     , '>MRU-File[]>')
+  call l9#defineVariableDefault('g:fuf_mrufile_switchOrder', 50)
+  call l9#defineVariableDefault('g:fuf_mrufile_exclude'    , '\v\~$|\.(o|exe|dll|bak|orig|sw[po])$|^(\/\/|\\\\|\/mnt\/|\/media\/)')
   call l9#defineVariableDefault('g:fuf_mrufile_maxItem'    , 200)
+  call l9#defineVariableDefault('g:fuf_mrufile_maxItemDir' , 50)
+  call l9#defineVariableDefault('g:fuf_mrufile_keyExpand'  , '<C-]>')
   "---------------------------------------------------------------------------
-  call l9#defineVariableDefault('g:fuf_mrucmd_prompt'     , '>Mru-Cmd[]>')
-  call l9#defineVariableDefault('g:fuf_mrucmd_switchOrder', 50)
+  call l9#defineVariableDefault('g:fuf_mrucmd_prompt'     , '>MRU-Cmd[]>')
+  call l9#defineVariableDefault('g:fuf_mrucmd_switchOrder', 60)
   call l9#defineVariableDefault('g:fuf_mrucmd_exclude'    , '^$')
   call l9#defineVariableDefault('g:fuf_mrucmd_maxItem'    , 200)
   "---------------------------------------------------------------------------
-  call l9#defineVariableDefault('g:fuf_bookmark_prompt'     , '>Bookmark[]>')
-  call l9#defineVariableDefault('g:fuf_bookmark_switchOrder', 60)
-  call l9#defineVariableDefault('g:fuf_bookmark_searchRange', 400)
-  call l9#defineVariableDefault('g:fuf_bookmark_keyDelete'  , '<C-]>')
+  call l9#defineVariableDefault('g:fuf_bookmarkfile_prompt'     , '>Bookmark-File[]>')
+  call l9#defineVariableDefault('g:fuf_bookmarkfile_switchOrder', 70)
+  call l9#defineVariableDefault('g:fuf_bookmarkfile_searchRange', 400)
+  call l9#defineVariableDefault('g:fuf_bookmarkfile_keyDelete'  , '<C-]>')
+  "---------------------------------------------------------------------------
+  call l9#defineVariableDefault('g:fuf_bookmarkdir_prompt'     , '>Bookmark-Dir[]>')
+  call l9#defineVariableDefault('g:fuf_bookmarkdir_switchOrder', 80)
+  call l9#defineVariableDefault('g:fuf_bookmarkdir_keyDelete'  , '<C-]>')
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_tag_prompt'     , '>Tag[]>')
-  call l9#defineVariableDefault('g:fuf_tag_switchOrder', 70)
-  call l9#defineVariableDefault('g:fuf_tag_cache_dir'  , '~/.vim-fuf-cache/tag')
+  call l9#defineVariableDefault('g:fuf_tag_switchOrder', 90)
+  "---------------------------------------------------------------------------
+  call l9#defineVariableDefault('g:fuf_buffertag_prompt'     , '>Buffer-Tag[]>')
+  call l9#defineVariableDefault('g:fuf_buffertag_switchOrder', 100)
+  call l9#defineVariableDefault('g:fuf_buffertag_ctagsPath'  , 'ctags')
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_taggedfile_prompt'     , '>Tagged-File[]>')
-  call l9#defineVariableDefault('g:fuf_taggedfile_switchOrder', 80)
-  call l9#defineVariableDefault('g:fuf_taggedfile_cache_dir'  , '~/.vim-fuf-cache/taggedfile')
+  call l9#defineVariableDefault('g:fuf_taggedfile_switchOrder', 110)
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_jumplist_prompt'     , '>Jump-List[]>')
-  call l9#defineVariableDefault('g:fuf_jumplist_switchOrder', 90)
+  call l9#defineVariableDefault('g:fuf_jumplist_switchOrder', 120)
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_changelist_prompt'     , '>Change-List[]>')
-  call l9#defineVariableDefault('g:fuf_changelist_switchOrder', 100)
+  call l9#defineVariableDefault('g:fuf_changelist_switchOrder', 130)
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_quickfix_prompt'     , '>Quickfix[]>')
-  call l9#defineVariableDefault('g:fuf_quickfix_switchOrder', 110)
+  call l9#defineVariableDefault('g:fuf_quickfix_switchOrder', 140)
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_line_prompt'     , '>Line[]>')
-  call l9#defineVariableDefault('g:fuf_line_switchOrder', 120)
+  call l9#defineVariableDefault('g:fuf_line_switchOrder', 150)
   "---------------------------------------------------------------------------
   call l9#defineVariableDefault('g:fuf_help_prompt'     , '>Help[]>')
-  call l9#defineVariableDefault('g:fuf_help_switchOrder', 130)
-  call l9#defineVariableDefault('g:fuf_help_cache_dir'  , '~/.vim-fuf-cache/help')
+  call l9#defineVariableDefault('g:fuf_help_switchOrder', 160)
   "---------------------------------------------------------------------------
-  call filter(g:fuf_modes, 'count(g:fuf_modesDisable, v:val) == 0')
-  for m in g:fuf_modes
-    call fuf#{m}#renewCache()
-    call fuf#{m}#onInit()
-  endfor
+  command! -bang -narg=0 FufEditDataFile call fuf#editDataFile()
+  command! -bang -narg=0 FufRenewCache   call s:renewCachesOfAllModes()
   "---------------------------------------------------------------------------
-  command! -bang -narg=0 FufEditInfo   call fuf#editInfoFile()
-  command! -bang -narg=0 FufRenewCache call s:renewCachesOfAllModes()
+  call fuf#addMode('buffer')
+  call fuf#addMode('file')
+  call fuf#addMode('coveragefile')
+  call fuf#addMode('dir')
+  call fuf#addMode('mrufile')
+  call fuf#addMode('mrucmd')
+  call fuf#addMode('bookmarkfile')
+  call fuf#addMode('bookmarkdir')
+  call fuf#addMode('tag')
+  call fuf#addMode('buffertag')
+  call fuf#addMode('taggedfile')
+  call fuf#addMode('jumplist')
+  call fuf#addMode('changelist')
+  call fuf#addMode('quickfix')
+  call fuf#addMode('line')
+  call fuf#addMode('help')
+  call fuf#addMode('givenfile')
+  call fuf#addMode('givendir')
+  call fuf#addMode('givencmd')
+  call fuf#addMode('callbackfile')
+  call fuf#addMode('callbackitem')
   "---------------------------------------------------------------------------
-  for m in g:fuf_modes
-    if fuf#{m}#requiresOnCommandPre()
-      " cnoremap has a problem, which doesn't expand cabbrev.
-      cmap <silent> <expr> <CR> <SID>onCommandPre()
-      break
-    endif
-  endfor
-  "---------------------------------------------------------------------------
-endfunction
-
-"
-function s:initMisc()
 endfunction
 
 "
 function s:renewCachesOfAllModes()
-  for m in g:fuf_modes 
+  for m in fuf#getModeNames()
     call fuf#{m}#renewCache()
   endfor
-endfunction
-
-"
-function s:onBufEnter()
-  for m in g:fuf_modes 
-    call fuf#{m}#onBufEnter()
-  endfor
-endfunction
-
-"
-function s:onBufWritePost()
-  for m in g:fuf_modes
-    call fuf#{m}#onBufWritePost()
-  endfor
-endfunction
-
-"
-function s:onCommandPre()
-  for m in filter(copy(g:fuf_modes), 'fuf#{v:val}#requiresOnCommandPre()')
-      call fuf#{m}#onCommandPre(getcmdtype() . getcmdline())
-  endfor
-  " lets last entry become the newest in the history
-  call histadd(getcmdtype(), getcmdline())
-  " this is not mapped again (:help recursive_mapping)
-  return "\<CR>"
 endfunction
 
 " }}}1

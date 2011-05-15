@@ -4,7 +4,7 @@
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 100)
+if !l9#guardScriptLoading(expand('<sfile>:p'), 0, 0, [])
   finish
 endif
 
@@ -20,6 +20,11 @@ endfunction
 "
 function fuf#givendir#getSwitchOrder()
   return -1
+endfunction
+
+"
+function fuf#givendir#getEditableDataNames()
+  return []
 endfunction
 
 "
@@ -64,7 +69,7 @@ endfunction
 
 "
 function s:handler.getPrompt()
-  return fuf#formatPrompt(s:prompt, self.partialMatching)
+  return fuf#formatPrompt(s:prompt, self.partialMatching, '')
 endfunction
 
 "
@@ -73,7 +78,7 @@ function s:handler.getPreviewHeight()
 endfunction
 
 "
-function s:handler.targetsPath()
+function s:handler.isOpenable(enteredPattern)
   return 1
 endfunction
 
@@ -86,7 +91,7 @@ endfunction
 "
 function s:handler.makePreviewLines(word, count)
   return fuf#makePreviewLinesAround(
-        \ split(glob(fnamemodify(a:word, ':p') . '*'), "\n"),
+        \ fuf#glob(fnamemodify(a:word, ':p') . '*'),
         \ [], a:count, self.getPreviewHeight())
   return 
 endfunction

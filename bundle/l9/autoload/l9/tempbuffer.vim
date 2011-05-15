@@ -4,7 +4,7 @@
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, l9#getVersion())
+if !l9#guardScriptLoading(expand('<sfile>:p'), 0, 0, [])
   finish
 endif
 
@@ -42,8 +42,7 @@ endfunction
 "           If less than 0, the window becomes full-screen. 
 " a:listener:
 "   a:listener.onClose(written)
-"   a:listener.onWrite(lines)
-function l9#tempbuffer#open(bufname, filetype, lines, topleft, vertical, height, writable, listener)
+function l9#tempbuffer#openScratch(bufname, filetype, lines, topleft, vertical, height, listener)
   let openCmdPrefix = (a:topleft ? 'topleft ' : '')
         \           . (a:vertical ? 'vertical ' : '')
         \           . (a:height > 0 ? a:height : '')
@@ -52,30 +51,40 @@ function l9#tempbuffer#open(bufname, filetype, lines, topleft, vertical, height,
   else
     call l9#tempbuffer#close(a:bufname)
     execute openCmdPrefix . 'split'
-    execute s:dataMap[a:bufname].bufNr . 'buffer'
+    execute 'silent ' . s:dataMap[a:bufname].bufNr . 'buffer'
   endif
-  let s:dataMap[a:bufname] = {
-        \   'bufNr': bufnr('%'),
-        \   'written': 0,
-        \   'listener': a:listener,
-        \ }
   if a:height < 0
     only
   endif
-  setlocal buflisted noswapfile bufhidden=delete
+  setlocal buflisted noswapfile bufhidden=delete modifiable noreadonly buftype=nofile
   let &l:filetype = a:filetype
   silent file `=a:bufname`
   call setline(1, a:lines)
-  if a:writable
-    setlocal nomodified   modifiable noreadonly buftype=acwrite
-  else
-    setlocal nomodified nomodifiable   readonly buftype=nofile
-  endif
+  setlocal nomodified
   augroup L9TempBuffer
     autocmd! * <buffer>
     execute printf('autocmd BufDelete   <buffer>        call s:onBufDelete  (%s)', string(a:bufname))
     execute printf('autocmd BufWriteCmd <buffer> nested call s:onBufWriteCmd(%s)', string(a:bufname))
   augroup END
+  let s:dataMap[a:bufname] = {
+        \   'bufNr': bufnr('%'),
+        \   'written': 0,
+        \   'listener': a:listener,
+        \ }
+endfunction
+
+"
+function l9#tempbuffer#openReadOnly(bufname, filetype, lines, topleft, vertical, height, listener)
+  call l9#tempbuffer#openScratch(a:bufname, a:filetype, a:lines, a:topleft, a:vertical, a:height, a:listener)
+  setlocal nomodifiable readonly
+endfunction
+
+" a:listener:
+"   a:listener.onClose(written)
+"   a:listener.onWrite(lines)
+function l9#tempbuffer#openWritable(bufname, filetype, lines, topleft, vertical, height, listener)
+  call l9#tempbuffer#openScratch(a:bufname, a:filetype, a:lines, a:topleft, a:vertical, a:height, a:listener)
+  setlocal buftype=acwrite
 endfunction
 
 " makes specified temp buffer current.

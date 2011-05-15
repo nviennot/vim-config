@@ -17,7 +17,7 @@ l9はVimスクリプトの関数やコマンドを提供するライブラリで
 
 
 ==============================================================================
-インストール                                                *fuf-installation*
+ インストール                                                *l9-installation*
 
 ZIPファイルをランタイムディレクトリに展開します。
 
@@ -44,7 +44,7 @@ ZIPファイルをランタイムディレクトリに展開します。
 
 作者:       Takeshi NISHIDA <ns9tks@DELETE-ME.gmail.com>
 ライセンス: MIT Licence
-URL:        http://www.vim.org/scripts/script.php?script_id= [TODO]
+URL:        http://www.vim.org/scripts/script.php?script_id=3252
             http://bitbucket.org/ns9tks/vim-l9/
 
 バグや要望など ~

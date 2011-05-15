@@ -14,29 +14,37 @@ let g:loaded_autoload_l9 = 1
 " COMPATIBILITY TEST {{{1
 
 "
-let s:L9_VERSION_CURRENT    = 100
-let s:L9_VERSION_COMPATIBLE =   0
+let s:L9_VERSION_CURRENT  = 101
+let s:L9_VERSION_PASSABLE = 101
 
 " returns true if given version is compatible.
 function l9#isCompatible(ver)
-  return (s:L9_VERSION_COMPATIBLE <= a:ver && a:ver <= s:L9_VERSION_CURRENT)
+  return 
 endfunction
 
-let s:versionFactor = 0.01
+let s:VERSION_FACTOR = str2float('0.01')
 
 " returns false if the caller script should finish.
-" l9Version: same rule as v:version
-function l9#guardScriptLoading(path, vimVersion, l9Version)
+" a:vimVersion: if 0, don't check vim version
+" a:l9Version: same rule as v:version
+function l9#guardScriptLoading(path, vimVersion, l9Version, exprs)
   let loadedVarName = 'g:loaded_' . substitute(a:path, '\W', '_', 'g')
   if exists(loadedVarName)
     return 0
-  elseif v:version < a:vimVersion
-    echoerr a:path . ' requires Vim version ' . string(a:vimVersion * s:versionFactor)
+  elseif a:vimVersion > 0 && a:vimVersion > v:version
+    echoerr a:path . ' requires Vim version ' . string(a:vimVersion * s:VERSION_FACTOR)
     return 0
-  elseif !exists('*l9#isCompatible') || !l9#isCompatible(a:l9Version)
-    echoerr a:path . ' requires L9 library version ' . string(a:l9Version * s:versionFactor)
+  elseif a:l9Version > 0 && (a:l9Version > s:L9_VERSION_CURRENT ||
+        \                    a:l9Version < s:L9_VERSION_PASSABLE)
+    echoerr a:path . ' requires L9 library version ' . string(a:l9Version * s:VERSION_FACTOR)
     return 0
   endif
+  for expr in a:exprs
+    if !eval(expr)
+      echoerr a:path . ' requires: ' . expr
+      return 0
+    endif
+  endfor
   let {loadedVarName} = 1
   return 1
 endfunction
@@ -86,6 +94,16 @@ function l9#concat(items)
   let result = []
   for l in a:items
     let result += l
+  endfor
+  return result
+endfunction
+
+" [ [0,1,2], [3,4], [5,6,7,8] ] -> [ [0,3,5],[1,4,6] ]
+" This function doesn't change the list of argument.
+function l9#zip(items)
+  let result = []
+  for i in range(min(map(copy(a:items), 'len(v:val)')))
+    call add(result, map(copy(a:items), 'v:val[i]'))
   endfor
   return result
 endfunction
@@ -210,6 +228,22 @@ function l9#getPathSeparator()
   return (!&shellslash && (has('win32') || has('win64')) ? '\' : '/')
 endfunction
 
+" [ 'a', 'b/', '/c' ] -> 'a/b/c'
+function l9#concatPaths(paths)
+  let result = ''
+  for p in a:paths
+    if empty(p)
+      continue
+    elseif empty(result)
+      let result = p
+    else
+      let result = substitute(result, '[/\\]$', '', '') . l9#getPathSeparator()
+            \    . substitute(p, '^[/\\]', '', '')
+    endif
+  endfor
+  return result
+endfunction
+
 " path: '/a/b/c/d', dir: '/a/b' => 'c/d'
 function l9#modifyPathRelativeToDir(path, dir)
   let pathFull = fnamemodify(a:path, ':p')
@@ -218,6 +252,36 @@ function l9#modifyPathRelativeToDir(path, dir)
     return pathFull
   endif
   return pathFull[len(dirFull):]
+endfunction
+
+" }}}1
+"=============================================================================
+" FILE {{{1
+
+" Almost same as readfile().
+function l9#readFile(...)
+  let args = copy(a:000)
+  let args[0] = expand(args[0])
+  try
+    return call('readfile', args)
+  catch
+  endtry
+  return []
+endfunction
+
+" Almost same as writefile().
+function l9#writeFile(...)
+  let args = copy(a:000)
+  let args[1] = expand(args[1])
+  let dir = fnamemodify(args[1], ':h')
+  try
+    if !isdirectory(dir)
+      call mkdir(dir, 'p')
+    endif
+    return call('writefile', args)
+  catch
+  endtry
+  return -1 " -1 is error code.
 endfunction
 
 " }}}1

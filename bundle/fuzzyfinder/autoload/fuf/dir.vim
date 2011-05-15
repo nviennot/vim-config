@@ -4,7 +4,7 @@
 "=============================================================================
 " LOAD GUARD {{{1
 
-if !l9#guardScriptLoading(expand('<sfile>:p'), 702, 100)
+if !l9#guardScriptLoading(expand('<sfile>:p'), 0, 0, [])
   finish
 endif
 
@@ -23,6 +23,11 @@ function fuf#dir#getSwitchOrder()
 endfunction
 
 "
+function fuf#dir#getEditableDataNames()
+  return []
+endfunction
+
+"
 function fuf#dir#renewCache()
   let s:cache = {}
 endfunction
@@ -34,9 +39,9 @@ endfunction
 
 "
 function fuf#dir#onInit()
-  call fuf#defineLaunchCommand('FufDir'                    , s:MODE_NAME, '""')
-  call fuf#defineLaunchCommand('FufDirWithFullCwd'         , s:MODE_NAME, 'fnamemodify(getcwd(), '':p'')')
-  call fuf#defineLaunchCommand('FufDirWithCurrentBufferDir', s:MODE_NAME, 'expand(''%:~:.'')[:-1-len(expand(''%:~:.:t''))]')
+  call fuf#defineLaunchCommand('FufDir'                    , s:MODE_NAME, '""', [])
+  call fuf#defineLaunchCommand('FufDirWithFullCwd'         , s:MODE_NAME, 'fnamemodify(getcwd(), '':p'')', [])
+  call fuf#defineLaunchCommand('FufDirWithCurrentBufferDir', s:MODE_NAME, 'expand(''%:~:.'')[:-1-len(expand(''%:~:.:t''))]', [])
 endfunction
 
 " }}}1
@@ -73,7 +78,7 @@ endfunction
 
 "
 function s:handler.getPrompt()
-  return fuf#formatPrompt(g:fuf_dir_prompt, self.partialMatching)
+  return fuf#formatPrompt(g:fuf_dir_prompt, self.partialMatching, '')
 endfunction
 
 "
@@ -82,8 +87,8 @@ function s:handler.getPreviewHeight()
 endfunction
 
 "
-function s:handler.targetsPath()
-  return 1
+function s:handler.isOpenable(enteredPattern)
+  return a:enteredPattern =~# '[^/\\]$'
 endfunction
 
 "
@@ -95,7 +100,7 @@ endfunction
 "
 function s:handler.makePreviewLines(word, count)
   return fuf#makePreviewLinesAround(
-        \ split(glob(fnamemodify(a:word, ':p') . '*'), "\n"),
+        \ fuf#glob(fnamemodify(a:word, ':p') . '*'),
         \ [], a:count, self.getPreviewHeight())
   return 
 endfunction
