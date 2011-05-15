@@ -163,13 +163,7 @@ nnoremap <silent> <C-d><C-b> :FufAddBookmark<CR>
 vnoremap <silent> <C-d><C-b> :FufAddBookmarkAsSelectedText<CR>
 nnoremap <silent> <C-d><C-r> :FufRenewCache<CR>
 
-
-"if filereadable("cscope.out")
-    "cs add cscope.out
-"endif
 set directory=~/.vim/swap
-
-set completeopt=menuone
 
 map <F1> :set lines=75<CR>:set columns=135<CR>
 map <F2> :set lines=75<CR>:set columns=210<CR>
