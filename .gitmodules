@@ -97,3 +97,6 @@
 [submodule "bundle/matchit"]
 	path = bundle/matchit
 	url = git://github.com/vim-scripts/matchit.zip.git
+[submodule "bundle/manpageview"]
+	path = bundle/manpageview
+	url = git://github.com/vim-scripts/ManPageView.git
