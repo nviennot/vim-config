@@ -100,3 +100,6 @@
 [submodule "bundle/manpageview"]
 	path = bundle/manpageview
 	url = git://github.com/vim-scripts/ManPageView.git
+[submodule "bundle/molokai"]
+	path = bundle/molokai
+	url = git://github.com/nviennot/molokai.git

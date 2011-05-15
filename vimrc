@@ -13,7 +13,7 @@ elseif $TERM =~ '^xterm$'
 endif
 
 set cursorline
-colorscheme custom_molokai
+colorscheme molokai
 set number
 
 set autoindent smartindent      " turn on auto/smart indenting
