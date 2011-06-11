@@ -17,7 +17,7 @@ syn keyword cRepeat __list_for_each_rcu list_for_each_entry_rcu list_for_each_co
 syn keyword cType __s8 __u8 __s16 __u16 __s32 __u32 __s64 __u64 s8 u8 s16 u16 s32 u32 s64 u64 loff_t
 
 syn keyword cPreCondit mutex_lock mutex_lock_nested mutex_unlock mutex_lock_interruptible_nested
-syn keyword cPreCondit spin_lock spin_unlock spin_lock_irqsave spin_unlock_irqrestore spin_lock_nested spin_lock_irq spin_unlock_irq write_lock_irq write_unlock_irq
+syn keyword cPreCondit spin_lock spin_unlock spin_lock_irqsave spin_unlock_irqrestore spin_lock_nested spin_lock_irq spin_unlock_irq write_lock_irq write_unlock_irq spin_lock_bh spin_unlock_bh
 syn keyword cPreCondit read_lock read_unlock read_lock_irq read_unlock_irq
 syn keyword cPreCondit rcu_read_lock rcu_read_unlock
 syn keyword cPreCondit atomic_dec_and_lock
