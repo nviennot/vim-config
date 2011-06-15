@@ -1,7 +1,9 @@
+" Run pathogen to load vim bundles
+" Each plugin in that folder will now be seen by Vim
 filetype off
-
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
+
 
 syntax on
 filetype plugin indent on
@@ -21,7 +23,7 @@ set smarttab                    " make <tab> and <backspace> smarter
 set tabstop=8                   " tabstops of 8
 set shiftwidth=8                " indents of 8
 set backspace=eol,start,indent  " allow backspacing over indent, eol, & start
-set undolevels=1000             " number of forgivable mistakes
+set undolevels=10000             " number of forgivable mistakes
 set updatecount=100             " write swap file to disk every 100 chars
 set complete=.,w,b,u,U,t,i,d    " do lots of scanning on tab completion
 set viminfo=%100,'100,/100,h,\"500,:100,n~/.vim/viminfo
@@ -34,13 +36,24 @@ set showmatch
 
 set diffopt=filler,iwhite       " ignore all whitespace and sync
 
+
+"
+" Nerdtree
+"
+
 nnoremap <C-g> :NERDTreeToggle<cr>
 let NERDTreeIgnore=[ '\.pyc$', '\.pyo$', '\.py\$class$', '\.obj$', '\.o$', '\.so$', '\.egg$', '^\.git$' ]
 let NERDTreeHighlightCursorline=1
 let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 
+
+"
+" Yankring
+"
+
 let g:yankring_history_dir = '$HOME/.vim'
+
 
 let html_number_lines = 0
 let html_ignore_folding = 1
@@ -134,7 +147,6 @@ vnoremap . :normal .<CR>
 vnoremap @ :normal! @
 map <silent> <C-u> :YRShow<CR>
 
-set undolevels=10000
 let xml_use_xhtml = 1
 
 " FuzzyFinder
