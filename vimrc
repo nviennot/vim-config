@@ -136,6 +136,8 @@ let localmapleader=","
 map <Leader>ss :setlocal spell!<cr>
 map <Leader>/ :nohlsearch<cr>
 map <Leader>l :MiniBufExplorer<cr>
+" remove trailing spaces
+map <leader>t :let _s=@/<Bar>:%s/\s\+$//e<Bar>:let @/=_s<Bar>:nohl<CR>
 
 map <M-[> :tprev<CR>
 map <M-]> :tnext<CR>
