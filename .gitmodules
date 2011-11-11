@@ -103,3 +103,6 @@
 [submodule "bundle/molokai"]
 	path = bundle/molokai
 	url = git://github.com/nviennot/molokai.git
+[submodule "bundle/armasm"]
+	path = bundle/armasm
+	url = git://github.com/nviennot/vim-armasm.git
