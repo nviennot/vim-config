@@ -103,3 +103,6 @@
 [submodule "bundle/armasm"]
 	path = bundle/armasm
 	url = git://github.com/nviennot/vim-armasm.git
+[submodule "bundle/cscope_maps"]
+	path = bundle/cscope_maps
+	url = git://github.com/chazy/cscope_maps.git
