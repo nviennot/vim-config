@@ -76,9 +76,6 @@
 [submodule "bundle/tlib"]
 	path = bundle/tlib
 	url = git://github.com/tomtom/tlib_vim.git
-[submodule "bundle/fuzzyfinder"]
-	path = bundle/fuzzyfinder
-	url = git://github.com/vim-scripts/FuzzyFinder.git
 [submodule "bundle/l9"]
 	path = bundle/l9
 	url = git://github.com/vim-scripts/L9.git

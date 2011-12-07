@@ -21,7 +21,7 @@ set smarttab                    " make <tab> and <backspace> smarter
 set tabstop=8                   " tabstops of 8
 set shiftwidth=8                " indents of 8
 set backspace=eol,start,indent  " allow backspacing over indent, eol, & start
-set undolevels=1000             " number of forgivable mistakes
+set undolevels=10000            " number of forgivable mistakes
 set updatecount=100             " write swap file to disk every 100 chars
 set complete=.,w,b,u,U,t,i,d    " do lots of scanning on tab completion
 set viminfo=%100,'100,/100,h,\"500,:100,n~/.vim/viminfo
@@ -134,34 +134,7 @@ vnoremap . :normal .<CR>
 vnoremap @ :normal! @
 map <silent> <C-u> :YRShow<CR>
 
-set undolevels=10000
 let xml_use_xhtml = 1
-
-" FuzzyFinder
-let g:fuf_modesDisable = []
-let g:fuf_abbrevMap = { }
-let g:fuf_mrufile_maxItem = 300
-let g:fuf_mrucmd_maxItem = 400
-nnoremap <silent> <C-d><C-p> :FufFileWithFullCwd<CR>
-nnoremap <silent> <C-d><C-f> :FufFile<CR>
-nnoremap <silent> <C-d><C-d> :FufDirWithCurrentBufferDir<CR>
-nnoremap <silent> <C-d>d     :FufDirWithFullCwd<CR>
-nnoremap <silent> <C-d>D     :FufDir<CR>
-nnoremap <silent> <C-d><C-j> :FufMruFile<CR>
-nnoremap <silent> <C-d><C-k> :FufMruCmd<CR>
-nnoremap <silent> <C-d><C-b> :FufBookmark<CR>
-nnoremap <silent> <C-d><C-t> :FufTag<CR>
-nnoremap <silent> <C-d>t     :FufTag!<CR>
-noremap  <silent> g]         :FufTagWithCursorWord!<CR>
-nnoremap <silent> <C-d>f     :FufTaggedFile<CR>
-nnoremap <silent> <C-d><C-j> :FufJumpList<CR>
-nnoremap <silent> <C-d><C-g> :FufChangeList<CR>
-nnoremap <silent> <C-d><C-q> :FufQuickfix<CR>
-nnoremap <silent> <C-d><C-l> :FufLine<CR>
-nnoremap <silent> <C-d><C-h> :FufHelp<CR>
-nnoremap <silent> <C-d><C-b> :FufAddBookmark<CR>
-vnoremap <silent> <C-d><C-b> :FufAddBookmarkAsSelectedText<CR>
-nnoremap <silent> <C-d><C-r> :FufRenewCache<CR>
 
 set directory=~/.vim/swap
 
