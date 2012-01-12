@@ -134,3 +134,5 @@ let g:syntastic_mode_map = { 'mode': 'active',
 			   \ 'passive_filetypes': ['c'] }
  
 let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
+
+let g:Powerline_symbols = 'unicode'
