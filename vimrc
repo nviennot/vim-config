@@ -48,21 +48,6 @@ let html_use_css = 1
 "let html_no_pre = 0
 "let use_xhtml = 1
 
-set ls=2 " Always show status line
-if has('statusline')
-   function SetStatusLineStyle()
-       let &stl="%f %y%([%R%M]%) %#StatusLineNC#%{&ff=='unix'?'':&ff.'\ format'}%* %{'!'[&ff=='".&ff."']}%{'$'[!&list]} (%{synIDattr(synID(line('.'),col('.'),0),'name')})%=%#Search# %{fugitive#statusline()} %#StatusLine# #%n %4.l/%L %3v %3.p%%"
-   endfunc
-   " Switch between the normal and vim-debug modes in the status line
-   nmap _ds :call SetStatusLineStyle()<CR>
-   call SetStatusLineStyle()
-   " Window title
-   if has('title')
-      set titlestring=%t%(\ [%R%M]%)
-   endif
-endif 
-
-
 command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
 function! s:HighlightLongLines(width)
     let targetWidth = a:width != '' ? a:width : 79
