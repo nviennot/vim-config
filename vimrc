@@ -136,3 +136,5 @@ let g:syntastic_mode_map = { 'mode': 'active',
 let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
 
 let g:Powerline_symbols = 'unicode'
+
+set laststatus=2
