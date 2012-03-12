@@ -123,8 +123,8 @@ let xml_use_xhtml = 1
 
 set directory=~/.vim/swap
 
-map <F1> :set lines=75<CR>:set columns=135<CR>
-map <F2> :set lines=75<CR>:set columns=210<CR>
+map <F1> :set guifont=Monospace\ 9<CR>:set lines=45<CR>:set columns=150<CR>
+map <F2> :set guifont=Monospace\ 14<CR>
 
 nnoremap <F5> :GundoToggle<CR>
 
