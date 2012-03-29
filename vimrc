@@ -41,6 +41,7 @@ let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 
 let g:yankring_history_dir = '$HOME/.vim'
+nnoremap <C-y> :YRShow<cr>
 
 let html_number_lines = 0
 let html_ignore_folding = 1
@@ -128,7 +129,7 @@ set undofile
 map <F1> :set guifont=Monospace\ 9<CR>:set lines=45<CR>:set columns=150<CR>
 map <F2> :set guifont=Monospace\ 14<CR>
 
-nnoremap <F5> :GundoToggle<CR>
+nnoremap <C-u> :GundoToggle<CR>
 
 let g:syntastic_enable_signs=1
 let g:syntastic_mode_map = { 'mode': 'active',
