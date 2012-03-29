@@ -60,6 +60,12 @@ function! s:HighlightLongLines(width)
     endif
 endfunction
 
+" When editing a file, always jump to the last cursor position
+autocmd BufReadPost *
+      \     if line("'\"") > 0 && line ("'\"") <= line("$") |
+      \         exe "normal g'\"" |
+      \     endif |
+
 
 """"""""""""""""""""""""""""""
 " => Minibuffer plugin
