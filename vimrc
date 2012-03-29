@@ -41,6 +41,7 @@ let NERDTreeShowBookmarks=1
 let NERDTreeShowFiles=1
 
 let g:yankring_history_dir = '$HOME/.vim'
+let g:yankring_manual_clipboard_check = 0
 nnoremap <C-y> :YRShow<cr>
 
 let html_number_lines = 0
