@@ -122,6 +122,8 @@ map <silent> <C-u> :YRShow<CR>
 let xml_use_xhtml = 1
 
 set directory=~/.vim/swap
+set undodir=~/.vim/undo
+set undofile
 
 map <F1> :set guifont=Monospace\ 9<CR>:set lines=45<CR>:set columns=150<CR>
 map <F2> :set guifont=Monospace\ 14<CR>
