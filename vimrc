@@ -150,5 +150,3 @@ let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
 let g:Powerline_symbols = 'unicode'
 
 set laststatus=2
-
-set mouse=a
