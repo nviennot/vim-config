@@ -150,3 +150,6 @@ let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
 let g:Powerline_symbols = 'unicode'
 
 set laststatus=2
+
+let g:ctrlp_map = '<c-e>'
+let g:ctrlp_custom_ignore = '/\.\|\.o\|\.so'
