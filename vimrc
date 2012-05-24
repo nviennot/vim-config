@@ -133,9 +133,6 @@ if has("persistent_undo")
   set undofile
 endif
 
-map <F1> :set guifont=Monospace\ 9<CR>:set lines=45<CR>:set columns=150<CR>
-map <F2> :set guifont=Monospace\ 14<CR>
-
 nnoremap <C-u> :GundoToggle<CR>
 
 let g:syntastic_enable_signs=1
