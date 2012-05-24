@@ -123,7 +123,6 @@ set listchars=tab:▸\ ,trail:•,extends:»,precedes:«
 
 vnoremap . :normal .<CR>
 vnoremap @ :normal! @
-map <silent> <C-u> :YRShow<CR>
 
 let xml_use_xhtml = 1
 
