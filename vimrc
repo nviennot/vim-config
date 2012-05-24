@@ -103,8 +103,8 @@ let g:miniBufExplVSplit = 20
 
 let g:syntastic_enable_signs=1
 let g:syntastic_mode_map = { 'mode': 'active',
-			   \ 'active_filetypes': [],
-			   \ 'passive_filetypes': ['c', 'scss'] }
+                           \ 'active_filetypes': [],
+                           \ 'passive_filetypes': ['c', 'scss'] }
 
 let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
 
@@ -122,34 +122,34 @@ let g:ctrlp_custom_ignore = '/\.\|\.o\|\.so'
 nmap fc :call CleanClose(1)<cr>
 nmap fq :call CleanClose(0)<cr>
 function! CleanClose(tosave)
-	if (a:tosave == 1)
-	    w!
-	endif
-	let todelbufNr = bufnr("%")
-	let newbufNr = bufnr("#")
-	if ((newbufNr != -1) && (newbufNr != todelbufNr) && buflisted(newbufNr))
-	    exe "b".newbufNr
-	else
-	    bnext
-	endif
-	if (bufnr("%") == todelbufNr)
-	    new
-	endif
-	exe "bd!".todelbufNr
+  if (a:tosave == 1)
+      w!
+  endif
+  let todelbufNr = bufnr("%")
+  let newbufNr = bufnr("#")
+  if ((newbufNr != -1) && (newbufNr != todelbufNr) && buflisted(newbufNr))
+      exe "b".newbufNr
+  else
+      bnext
+  endif
+  if (bufnr("%") == todelbufNr)
+      new
+  endif
+  exe "bd!".todelbufNr
 endfunction
 
 command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
 function! s:HighlightLongLines(width)
-    let targetWidth = a:width != '' ? a:width : 79
-    if targetWidth > 0
-        exec 'match Todo /\%>' . (targetWidth) . 'v/'
-    else
-        echomsg "Usage: HighlightLongLines [natural number]"
-    endif
+  let targetWidth = a:width != '' ? a:width : 79
+  if targetWidth > 0
+      exec 'match Todo /\%>' . (targetWidth) . 'v/'
+  else
+      echomsg "Usage: HighlightLongLines [natural number]"
+  endif
 endfunction
 
 " When opening a file, always jump to the last cursor position
 autocmd BufReadPost *
-      \     if line("'\"") > 0 && line ("'\"") <= line("$") |
-      \         exe "normal g'\"" |
-      \     endif |
+    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+    \     exe "normal g'\"" |
+    \ endif |
