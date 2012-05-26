@@ -112,3 +112,6 @@
 [submodule "bundle/ctrlp"]
 	path = bundle/ctrlp
 	url = git://github.com/kien/ctrlp.vim.git
+[submodule "bundle/scala"]
+	path = bundle/scala
+	url = git@github.com:sidnair09/scala-vim.git
