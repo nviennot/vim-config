@@ -1,0 +1,4 @@
+set lines=39 columns=201
+
+map <F1> :set guifont=Monospace\ 9<CR>
+map <F2> :set guifont=Monospace\ 13<CR>
