@@ -8,6 +8,8 @@ Installation
     cp vimrc.mine.example vimrc.mine
     cp gvimrc.mine.example gvimrc.mine
     cd .vim
+    cp vimrc.mine.example vimrc.mine
+    cp gvimrc.mine.example gvimrc.mine
     git submodule init
     git submodule update
 
