@@ -138,16 +138,6 @@ function! CleanClose(tosave)
   exe "bd!".todelbufNr
 endfunction
 
-command! -nargs=? HighlightLongLines call s:HighlightLongLines('<args>')
-function! s:HighlightLongLines(width)
-  let targetWidth = a:width != '' ? a:width : 79
-  if targetWidth > 0
-      exec 'match Todo /\%>' . (targetWidth) . 'v/'
-  else
-      echomsg "Usage: HighlightLongLines [natural number]"
-  endif
-endfunction
-
 " When opening a file, always jump to the last cursor position
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line ("'\"") <= line("$") |
