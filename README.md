@@ -5,9 +5,9 @@ Installation
     git clone git://github.com/nviennot/vim-config.git .vim
     ln -s .vim/vimrc .vimrc
     ln -s .vim/gvimrc .gvimrc
+    cd .vim
     cp vimrc.mine.example vimrc.mine
     cp gvimrc.mine.example gvimrc.mine
-    cd .vim
     git submodule init
     git submodule update
 
