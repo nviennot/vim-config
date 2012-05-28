@@ -1,5 +1,3 @@
-filetype off
-
 call pathogen#runtime_append_all_bundles()
 call pathogen#helptags()
 
@@ -125,7 +123,6 @@ set listchars=tab:▸\ ,trail:•,extends:»,precedes:«
 
 vnoremap . :normal .<CR>
 vnoremap @ :normal! @
-map <silent> <C-u> :YRShow<CR>
 
 let xml_use_xhtml = 1
 
@@ -135,16 +132,13 @@ if has("persistent_undo")
   set undofile
 endif
 
-map <F1> :set guifont=Monospace\ 9<CR>:set lines=45<CR>:set columns=150<CR>
-map <F2> :set guifont=Monospace\ 14<CR>
-
 nnoremap <C-u> :GundoToggle<CR>
 
 let g:syntastic_enable_signs=1
 let g:syntastic_mode_map = { 'mode': 'active',
 			   \ 'active_filetypes': [],
 			   \ 'passive_filetypes': ['c', 'scss'] }
- 
+
 let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
 
 let g:Powerline_symbols = 'unicode'
