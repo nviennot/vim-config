@@ -115,3 +115,6 @@
 [submodule "bundle/scala"]
 	path = bundle/scala
 	url = git://github.com/sidnair09/scala-vim.git
+[submodule "bundle/screen"]
+	path = bundle/screen
+	url = git://github.com/ervandew/screen.git
