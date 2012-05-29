@@ -1,6 +1,7 @@
 DOTFILES = $(HOME)/.vimrc $(HOME)/.gvimrc
 MINEFILES = vimrc.mine gvimrc.mine
 TARGETS = $(DOTFILES) $(MINEFILES)
+SHELL = /bin/bash
 CWD = $(shell pwd)
 
 define check_file
