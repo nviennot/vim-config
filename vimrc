@@ -50,6 +50,7 @@ if has("persistent_undo")
   set undodir=~/.vim/undo       " Allow undoes to persist even after a file is closed
   set undofile
 endif
+nnoremap <C-u> :GundoToggle<CR>
 
 " Search settings
 set ignorecase
