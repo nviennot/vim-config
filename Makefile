@@ -29,6 +29,7 @@ install: $(TARGETS)
 
 update:
 	git pull
+	git submodule sync
 	git submodule update --init
 
 .PHONY: install update
