@@ -155,3 +155,6 @@ let g:ScreenShellTmuxInitArgs = '-2'
 let g:ScreenShellInitialFocus = 'shell'
 let g:ScreenShellQuitOnVimExit = 0
 map <F5> :ScreenShellVertical<CR>
+
+" Always edit file, even when swap file is found
+set shortmess+=A
