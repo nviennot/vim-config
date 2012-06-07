@@ -158,3 +158,6 @@ map <F5> :ScreenShellVertical<CR>
 
 " Always edit file, even when swap file is found
 set shortmess+=A
+
+" Toggle paste mode while in insert mode with F12
+set pastetoggle=<F12>
