@@ -118,6 +118,7 @@ let g:ctrlp_custom_ignore = '/\.\|\.o\|\.so'
 noremap <Leader>t= :Tabularize /=<CR>
 noremap <Leader>t: :Tabularize /^[^:]*:\zs/l0l1<CR>
 noremap <Leader>t> :Tabularize /=><CR>
+noremap <Leader>t, :Tabularize /,\zs/l0l1<CR>
 
 """""""""""""""""""""""""
 " Custom functions
