@@ -156,6 +156,7 @@ let g:ScreenShellTmuxInitArgs = '-2'
 let g:ScreenShellInitialFocus = 'shell'
 let g:ScreenShellQuitOnVimExit = 0
 map <F5> :ScreenShellVertical<CR>
+map <Leader>c :ScreenShellVertical bundle exec rails c<CR>
 map <Leader>r :w<CR> :call ScreenShellSend("rspec ".@% . ':' . line('.'))<CR>
 map <Leader>f :w<CR> :call ScreenShellSend("Rails.logger.level = Logger::WARN\n".
                                          \ "rspec ".@%."\n".
