@@ -158,9 +158,13 @@ let g:ScreenShellQuitOnVimExit = 0
 map <F5> :ScreenShellVertical<CR>
 command -nargs=? -complete=shellcmd W  :w | :call ScreenShellSend("load '".@%."';")
 map <Leader>c :ScreenShellVertical bundle exec rails c<CR>
+map <Leader>e :w<CR> :call ScreenShellSend("cucumber --format=pretty ".@% . ':' . line('.'))<CR>
 map <Leader>r :w<CR> :call ScreenShellSend("rspec ".@% . ':' . line('.'))<CR>
 map <Leader>f :w<CR> :call ScreenShellSend("Rails.logger.level = Logger::WARN;\n".
                                          \ "rspec ".@%."\n".
+                                         \ "Rails.logger.level = Logger::DEBUG;")<CR>
+map <Leader>d :w<CR> :call ScreenShellSend("Rails.logger.level = Logger::WARN;\n".
+                                         \ "cucumber ".@%."\n".
                                          \ "Rails.logger.level = Logger::DEBUG;")<CR>
 
 " Always edit file, even when swap file is found
