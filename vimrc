@@ -60,7 +60,7 @@ set incsearch
 set showmatch
 
 " to_html settings
-let html_number_lines = 0
+let html_number_lines = 1
 let html_ignore_folding = 1
 let html_use_css = 1
 "let html_no_pre = 0
