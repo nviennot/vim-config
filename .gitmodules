@@ -152,7 +152,7 @@
 	ignore = dirty
 [submodule "bundle/scala"]
 	path = bundle/scala
-	url = git://github.com/sidnair09/scala-vim.git
+	url = git://github.com/sidnair/scala-vim.git
 	ignore = dirty
 [submodule "bundle/screen"]
 	path = bundle/screen
