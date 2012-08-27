@@ -1,6 +1,6 @@
-syn match ErrorLeadSpace /^ \+/
+"syn match ErrorLeadSpace /^ \+/
 syn match ErrorTailSpace /\s\+$/
-match Error80 /\%>80v.\+/
+"match Error80 /\%>80v.\+/
 set textwidth=78
 
 syn keyword cOperator likely unlikely __typeof__ __builtin_constant_p
