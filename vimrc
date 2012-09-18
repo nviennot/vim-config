@@ -120,6 +120,7 @@ noremap <Leader>t: :Tabularize /^[^:]*:\zs/l0l1<CR>
 noremap <Leader>t> :Tabularize /=><CR>
 noremap <Leader>t, :Tabularize /,\zs/l0l1<CR>
 noremap <Leader>t{ :Tabularize /{<CR>
+noremap <Leader>t\| :Tabularize /\|<CR>
 
 """""""""""""""""""""""""
 " Custom functions
@@ -159,14 +160,9 @@ let g:ScreenShellQuitOnVimExit = 0
 map <F5> :ScreenShellVertical<CR>
 command -nargs=? -complete=shellcmd W  :w | :call ScreenShellSend("load '".@%."';")
 map <Leader>c :ScreenShellVertical bundle exec rails c<CR>
-map <Leader>e :w<CR> :call ScreenShellSend("cucumber --format=pretty ".@% . ':' . line('.'))<CR>
 map <Leader>r :w<CR> :call ScreenShellSend("rspec ".@% . ':' . line('.'))<CR>
-map <Leader>f :w<CR> :call ScreenShellSend("Rails.logger.level = Logger::WARN;\n".
-                                         \ "rspec ".@%."\n".
-                                         \ "Rails.logger.level = Logger::DEBUG;")<CR>
-map <Leader>d :w<CR> :call ScreenShellSend("Rails.logger.level = Logger::WARN;\n".
-                                         \ "cucumber ".@%."\n".
-                                         \ "Rails.logger.level = Logger::DEBUG;")<CR>
+map <Leader>e :w<CR> :call ScreenShellSend("cucumber --format=pretty ".@% . ':' . line('.'))<CR>
+map <Leader>b :w<CR> :call ScreenShellSend("break ".@% . ':' . line('.'))<CR>
 
 " Always edit file, even when swap file is found
 set shortmess+=A
