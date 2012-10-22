@@ -127,8 +127,9 @@ noremap <Leader>t\| :Tabularize /\|<CR>
 """""""""""""""""""""""""
 :command -bar -nargs=1 OpenURL :!firefox <args>
 
-nmap fc :call CleanClose(1)<cr>
-nmap fq :call CleanClose(0)<cr>
+"nmap fc :call CleanClose(1)<cr>
+"nmap fq :call CleanClose(0)<cr>
+
 function! CleanClose(tosave)
   if (a:tosave == 1)
       w!
