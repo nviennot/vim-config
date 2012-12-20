@@ -1,8 +1,11 @@
 """""""""""""""""""""""""
 " Basic features
 """""""""""""""""""""""""
-call pathogen#runtime_append_all_bundles()
-call pathogen#helptags()
+let pathogen_disabled = []
+if !has('gui_running')
+  call add(g:pathogen_disabled, 'css-color')
+endif
+call pathogen#infect()
 
 " Display options
 syntax on
