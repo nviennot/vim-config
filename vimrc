@@ -170,3 +170,5 @@ set shortmess+=A
 
 " Toggle paste mode while in insert mode with F12
 set pastetoggle=<F12>
+
+au BufNewFile,BufRead *.less set filetype=less

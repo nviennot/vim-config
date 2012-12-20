@@ -1,7 +1,3 @@
-[submodule "bundle/lesscss"]
-	path = bundle/lesscss
-	url = git://gist.github.com/369178.git
-	ignore = dirty
 [submodule "bundle/markdown"]
 	path = bundle/markdown
 	url = git://github.com/ujihisa/vim-markdown.git
@@ -158,3 +154,9 @@
 	path = bundle/webapi
 	url = git://github.com/mattn/webapi-vim.git
 	ignore = dirty
+[submodule "bundle/less"]
+	path = bundle/less
+	url = git://github.com/groenewege/vim-less.git
+[submodule "bundle/css3-syntax"]
+	path = bundle/css3-syntax
+	url = git://github.com/hail2u/vim-css3-syntax.git
