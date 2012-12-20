@@ -30,7 +30,6 @@ set updatecount=100             " Write swap file to disk every 100 chars
 set directory=~/.vim/swap       " Directory to use for the swap file
 set diffopt=filler,iwhite       " In diff mode, ignore whitespace changes and align unchanged lines
 set scrolloff=3                 " Start scrolling 3 lines before the horizontal window border
-set autochdir                   " Automatically cd into dir that the file is in
 set noerrorbells                " Disable error bells
 set nostartofline               " Don’t reset cursor to start of line when moving around.
 
