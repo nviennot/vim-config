@@ -106,10 +106,6 @@
 	path = bundle/yankring
 	url = git://github.com/vim-scripts/YankRing.vim.git
 	ignore = dirty
-[submodule "bundle/grep"]
-	path = bundle/grep
-	url = git://github.com/vim-scripts/grep.vim.git
-	ignore = dirty
 [submodule "bundle/minibufexpl"]
 	path = bundle/minibufexpl
 	url = git://github.com/fholgado/minibufexpl.vim.git
@@ -157,9 +153,15 @@
 [submodule "bundle/less"]
 	path = bundle/less
 	url = git://github.com/groenewege/vim-less.git
+	ignore = dirty
 [submodule "bundle/css3-syntax"]
 	path = bundle/css3-syntax
 	url = git://github.com/hail2u/vim-css3-syntax.git
+	ignore = dirty
 [submodule "bundle/css-color"]
 	path = bundle/css-color
 	url = git://github.com/skammer/vim-css-color.git
+	ignore = dirty
+[submodule "bundle/ack"]
+	path = bundle/ack
+	url = git://github.com/mileszs/ack.vim.git
