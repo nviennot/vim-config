@@ -185,3 +185,20 @@ set shortmess+=A
 set pastetoggle=<F12>
 
 au BufNewFile,BufRead *.less set filetype=less
+
+" cscope
+if has("cscope")
+  set cscopetag " use both cscope and ctag for 'ctrl-]', ':ta', and 'vim -t'
+
+  " check cscope for definition of a symbol before checking ctags: set to 1
+  " if you want the reverse search order.
+  set csto=0
+
+  " add any cscope database in current directory
+  if filereadable("cscope.out")
+    cs add cscope.out
+  endif
+
+  " show msg when any other cscope db added
+  set cscopeverbose
+end
