@@ -31,7 +31,6 @@ set directory=~/.vim/swap       " Directory to use for the swap file
 set diffopt=filler,iwhite       " In diff mode, ignore whitespace changes and align unchanged lines
 set scrolloff=3                 " Start scrolling 3 lines before the horizontal window border
 set noerrorbells                " Disable error bells
-set nostartofline               " Don’t reset cursor to start of line when moving around.
 
 " up/down on displayed lines, not real lines. More useful than painful.
 noremap k gk
@@ -124,7 +123,6 @@ set laststatus=2
 
 let g:ctrlp_map = '<c-e>'
 let g:ctrlp_custom_ignore = '/\.\|\.o\|\.so'
-let g:ctrlp_cmd = 'CtrlPMRU'
 let g:ctrlp_open_new_file = 'h'
 let g:ctrlp_open_multiple_files = 'h'
 
