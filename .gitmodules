@@ -168,3 +168,6 @@
 [submodule "bundle/bufsurf"]
 	path = bundle/bufsurf
 	url = git://github.com/ton/vim-bufsurf.git
+[submodule "bundle/tagbar"]
+	path = bundle/tagbar
+	url = git://github.com/majutsushi/tagbar.git
