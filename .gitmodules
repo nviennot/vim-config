@@ -165,3 +165,6 @@
 [submodule "bundle/ack"]
 	path = bundle/ack
 	url = git://github.com/mileszs/ack.vim.git
+[submodule "bundle/bufsurf"]
+	path = bundle/bufsurf
+	url = git://github.com/ton/vim-bufsurf.git
