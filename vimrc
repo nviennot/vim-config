@@ -104,7 +104,7 @@ vnoremap . :normal .<CR>
 vnoremap @ :normal! @
 
 " Toggles
-map <F1> :set invpaste<CR>
+map <silent> <F1> :set invpaste<CR>
 map <F2> :setlocal spell!<CR>
 
 map <Leader>/ :nohlsearch<cr>
