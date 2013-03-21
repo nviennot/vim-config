@@ -103,18 +103,18 @@ vmap <Leader>s :S/
 vnoremap . :normal .<CR>
 vnoremap @ :normal! @
 
-" Toggle paste mode
-map <silent> <Leader>p :set invpaste<CR>
-
-map <Leader>o :setlocal spell!<cr>
+" Toggles
+map <F1> :set invpaste<CR>
+map <F2> :setlocal spell!<CR>
 
 map <Leader>/ :nohlsearch<cr>
 
 map <Home> :tprev<CR>
 map <End>  :tnext<CR>
 
-map <PageDown> :cnext<CR>
-map <PageUp>   :cprev<CR>
+" TODO Do also cnext and cprev as a fallback
+map <PageDown> :lnext<CR>
+map <PageUp>   :lprev<CR>
 
 " Make Y consistent with D and C
 function! YRRunAfterMaps()
@@ -125,6 +125,7 @@ endfunction
 noremap K k
 
 " Resize window splits
+" TODO Fix mousewheel
 nnoremap <Up>    3<C-w>-
 nnoremap <Down>  3<C-w>+
 nnoremap <Left>  3<C-w><
