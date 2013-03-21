@@ -104,8 +104,11 @@ vnoremap . :normal .<CR>
 vnoremap @ :normal! @
 
 " Toggles
-map <silent> <F1> :set invpaste<CR>
-map <F2> :setlocal spell!<CR>
+set pastetoggle=<F1>
+" the nmap is just for quicker powerline feedback
+nmap <silent> <F1>      :set invpaste<CR>
+nmap          <F2>      :setlocal spell!<CR>
+imap          <F2> <C-o>:setlocal spell!<CR>
 
 map <Leader>/ :nohlsearch<cr>
 
