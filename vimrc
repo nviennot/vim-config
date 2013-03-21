@@ -237,3 +237,8 @@ if has("cscope")
   " Show msg when any other cscope db is added
   set cscopeverbose
 end
+
+"""""""""""""""""""""""""
+" Local config
+"""""""""""""""""""""""""
+so ~/.vim/vimrc.mine
