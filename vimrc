@@ -84,9 +84,12 @@ let html_ignore_folding = 1
 let html_use_css = 1
 let xml_use_xhtml = 1
 
-" Save/restore view on close/open (folds, cursor, etc.)
-au BufWinLeave * silent! mkview
-au BufWinEnter * silent! loadview
+" When opening a file, always jump to the last cursor position
+autocmd BufReadPost *
+    \ if line("'\"") > 0 && line ("'\"") <= line("$") |
+    \     exe "normal g'\"" |
+    \ endif |
+
 
 " After 4s of inactivity, check for external file modifications on next keyrpress
 au CursorHold * checktime
