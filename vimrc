@@ -87,7 +87,7 @@ let xml_use_xhtml = 1
 " When opening a file, always jump to the last cursor position
 autocmd BufReadPost *
     \ if line("'\"") > 0 && line ("'\"") <= line("$") |
-    \     exe "normal g'\"" |
+    \     exe "normal g'\"zz" |
     \ endif |
 
 
