@@ -112,6 +112,7 @@ set pastetoggle=<F1>
 nmap <silent> <F1>      :set invpaste<CR>
 nmap          <F2>      :setlocal spell!<CR>
 imap          <F2> <C-o>:setlocal spell!<CR>
+" TODO toggle numbers
 
 map <Leader>/ :nohlsearch<cr>
 
@@ -248,3 +249,5 @@ end
 " Local config
 """""""""""""""""""""""""
 so ~/.vim/vimrc.mine
+
+" TODO raise contrast for comments
