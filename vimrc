@@ -153,7 +153,7 @@ cmap w!! w !sudo tee % >/dev/null
 nnoremap <Leader>b :BufSurfBack<cr>
 nnoremap <Leader>f :BufSurfForward<cr>
 
-nnoremap <C-u> :GundoToggle<CR>
+nnoremap <S-u> :GundoToggle<CR>
 
 " TODO Merge the NERDTreeFind with Toggle inteilligently.
 nnoremap <C-g> :NERDTreeToggle<cr>
