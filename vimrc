@@ -154,6 +154,8 @@ nnoremap <Leader>b :BufSurfBack<cr>
 nnoremap <Leader>f :BufSurfForward<cr>
 
 nnoremap <S-u> :GundoToggle<CR>
+let g:gundo_close_on_revert=1
+
 
 " TODO Merge the NERDTreeFind with Toggle inteilligently.
 nnoremap <C-g> :NERDTreeToggle<cr>
