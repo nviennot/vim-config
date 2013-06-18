@@ -171,3 +171,6 @@
 [submodule "bundle/tagbar"]
 	path = bundle/tagbar
 	url = git://github.com/majutsushi/tagbar.git
+[submodule "bundle/slim"]
+	path = bundle/slim
+	url = git://github.com/slim-template/vim-slim.git
