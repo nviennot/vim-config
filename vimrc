@@ -208,7 +208,7 @@ noremap \> :Tabularize /=><CR>
 noremap \, :Tabularize /,\zs/l0l1<CR>
 noremap \{ :Tabularize /{<CR>
 noremap \\| :Tabularize /\|<CR>
-noremap \& :Tabularize /&<CR>
+noremap \& :Tabularize /\(&\\|\\\\\)<CR>
 
 nnoremap <Leader>t :TagbarOpen fjc<CR>
 
