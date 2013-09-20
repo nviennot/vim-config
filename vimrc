@@ -112,10 +112,10 @@ set pastetoggle=<F1>
 nmap <silent> <F1>      :set invpaste<CR>
 nmap          <F2>      :setlocal spell!<CR>
 imap          <F2> <C-o>:setlocal spell!<CR>
+nmap <silent> <F3>      :set invwrap<CR>
 " TODO toggle numbers
 
 map <Leader>/ :nohlsearch<cr>
-
 map <Home> :tprev<CR>
 map <End>  :tnext<CR>
 
