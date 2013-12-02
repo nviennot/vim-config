@@ -201,7 +201,7 @@ let g:ctrlp_custom_ignore = '/\.\|\.o\|\.so'
 let g:ctrlp_switch_buffer = 0
 let g:ctrlp_regexp = 1
 let g:ctrlp_user_command = ['.git/', 'cd %s && git ls-files']
-map <Leader>m :CtrlPMRU<CR>
+map <Leader>, :CtrlPMRU<CR>
 
 noremap \= :Tabularize /=<CR>
 noremap \: :Tabularize /^[^:]*:\zs/l0l1<CR>
@@ -228,7 +228,7 @@ command -nargs=? -complete=shellcmd W  :w | :call ScreenShellSend("load '".@%."'
 map <Leader>r :w<CR> :call ScreenShellSend("rspec ".@% . ':' . line('.'))<CR>
 map <Leader>e :w<CR> :call ScreenShellSend("cucumber --format=pretty ".@% . ':' . line('.'))<CR>
 map <Leader>w :w<CR> :call ScreenShellSend("break ".@% . ':' . line('.'))<CR>
-map <Leader>, :w<CR> :call ScreenShellSend("\e[A")<CR>
+map <Leader>m :w<CR> :call ScreenShellSend("\e[A")<CR>
 
 """""""""""""""""""""""""
 " Cscope
