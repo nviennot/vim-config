@@ -1,5 +1,6 @@
 DOTFILES = $(HOME)/.vimrc $(HOME)/.gvimrc
 MINEFILES = vimrc.mine gvimrc.mine
+ME ?= example
 TARGETS = $(DOTFILES) $(MINEFILES)
 SHELL = /bin/bash
 CWD = $(shell pwd)
@@ -16,9 +17,9 @@ endef
 all:
 	@echo type make install.
 
-%.mine: %.mine.example
+%.mine: %.mine.$(ME)
 	$(call check_file,$@)
-	cp $@.example $@
+	cp $< $@
 
 $(HOME)/.%: %
 	$(call check_file,$@)
