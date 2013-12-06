@@ -17,15 +17,24 @@ endef
 all:
 	@echo type make install.
 
+clearfiles =
+ifeq ($(OVERWRITE),1)
+  clearfiles += clean_mine
+endif
+
+clean_mine:
+	rm -f $(MINEFILES)
+
 %.mine: %.mine.$(ME)
 	$(call check_file,$@)
-	cp $< $@
+	@echo Using $(ME) $* file
+	@cp $< $@
 
 $(HOME)/.%: %
 	$(call check_file,$@)
 	ln -fs $(PWD)/$< $@
 
-install: $(TARGETS)
+install: $(clearfiles) $(TARGETS)
 	git submodule update --init
 
 update:
@@ -33,4 +42,4 @@ update:
 	git submodule sync
 	git submodule update --init
 
-.PHONY: install update
+.PHONY: install update clean_mine
