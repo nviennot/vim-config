@@ -256,3 +256,5 @@ end
 so ~/.vim/vimrc.mine
 
 " TODO raise contrast for comments
+
+autocmd FileType markdown setlocal syntax=off
