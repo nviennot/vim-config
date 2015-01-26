@@ -174,3 +174,6 @@
 [submodule "bundle/slim"]
 	path = bundle/slim
 	url = git://github.com/slim-template/vim-slim.git
+[submodule "bundle/json"]
+	path = bundle/json
+	url = https://github.com/elzr/vim-json.git
