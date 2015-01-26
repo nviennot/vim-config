@@ -260,3 +260,19 @@ so ~/.vim/vimrc.mine
 autocmd FileType markdown setlocal syntax=off
 
 let g:vim_json_syntax_conceal = 0
+
+
+"" Rainbow config
+let g:rainbow_conf = { 'ctermfgs': ['red', 'yellow', 'green', 'cyan', 'magenta', 'red', 'yellow', 'green', 'cyan', 'magenta'] }
+let g:rainbow_matching_filetypes = ['lisp', 'scheme', 'clojure', 'javascript', 'html']
+
+function s:load()
+  if count(g:rainbow_matching_filetypes, &ft) > 0
+    call rainbow#hook()
+  endif
+endfunction
+
+augroup rainbow
+  autocmd!
+  autocmd BufNewFile,BufReadPost,FilterReadPost,FileReadPost,Syntax * nested call s:load()
+augroup END
