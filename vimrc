@@ -187,9 +187,12 @@ let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplVSplit = 20
 
 let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=1
 let g:syntastic_mode_map = { 'mode': 'active',
                            \ 'active_filetypes': [],
                            \ 'passive_filetypes': ['tex', 'c', 'scss', 'html', 'scala'] }
+let g:syntastic_javascript_checkers = ['jsxhint']
+
 
 let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
 
