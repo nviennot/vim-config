@@ -276,3 +276,6 @@ augroup rainbow
   autocmd!
   autocmd BufNewFile,BufReadPost,FilterReadPost,FileReadPost,Syntax * nested call s:load()
 augroup END
+
+" fix for vim-javascript + rainbow incompatibility
+autocmd FileType javascript syntax clear jsFuncBlock
