@@ -283,3 +283,4 @@ augroup END
 
 " fix for vim-javascript + rainbow incompatibility
 autocmd FileType javascript syntax clear jsFuncBlock
+set nocursorline
