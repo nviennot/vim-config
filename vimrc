@@ -145,6 +145,9 @@ nnoremap \| :vsplit<cr>
 vmap s :!sort<CR>
 vmap u :!sort -u<CR>
 
+" shift+j -> no extra space
+noremap <S-j> gJ
+
 " Write file when you forget to use sudo
 cmap w!! w !sudo tee % >/dev/null
 
