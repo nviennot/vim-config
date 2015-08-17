@@ -195,7 +195,13 @@ let g:syntastic_mode_map = { 'mode': 'active',
 let g:syntastic_javascript_checkers = ['jsxhint']
 let g:syntastic_quiet_messages = {"regex": 'assigned but unused variable'}
 
-let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
+let g:quickfixsigns_classes = ['qfl', 'vcsdiff', 'breakpoints']
+let g:quickfixsign_use_dummy = 0
+" Added BufEnter event to refresh when we come back to a file
+let g:quickfixsigns_class_vcsdiff = { 'sign': '*quickfixsigns#vcsdiff#Signs',
+                                    \ 'get': 'quickfixsigns#vcsdiff#GetList(%s)',
+                                    \ 'event': ['BufEnter', 'BufRead', 'BufWritePost'],
+                                    \ 'level': 6}
 
 let g:Powerline_symbols = 'unicode'
 set laststatus=2
