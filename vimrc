@@ -193,7 +193,7 @@ let g:syntastic_mode_map = { 'mode': 'active',
                            \ 'active_filetypes': [],
                            \ 'passive_filetypes': ['tex', 'c', 'scss', 'html', 'scala'] }
 let g:syntastic_javascript_checkers = ['jsxhint']
-
+let g:syntastic_quiet_messages = {"regex": 'assigned but unused variable'}
 
 let g:quickfixsigns_classes=['qfl', 'vcsdiff', 'breakpoints']
 
