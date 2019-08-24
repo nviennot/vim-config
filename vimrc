@@ -187,13 +187,13 @@ nnoremap <C-y> :YRShow<cr>
 let g:yankring_history_dir = '$HOME/.vim'
 let g:yankring_manual_clipboard_check = 0
 
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=1
-let g:syntastic_mode_map = { 'mode': 'active',
-                           \ 'active_filetypes': [],
-                           \ 'passive_filetypes': ['tex', 'c', 'scss', 'html', 'scala'] }
-let g:syntastic_javascript_checkers = ['jsxhint']
-let g:syntastic_quiet_messages = {"regex": 'assigned but unused variable'}
+" let g:syntastic_enable_signs=1
+" let g:syntastic_auto_loc_list=1
+" let g:syntastic_mode_map = { 'mode': 'active',
+                           " \ 'active_filetypes': [],
+                           " \ 'passive_filetypes': ['tex', 'c', 'scss', 'html', 'scala'] }
+" let g:syntastic_javascript_checkers = ['jsxhint']
+" let g:syntastic_quiet_messages = {"regex": 'assigned but unused variable'}
 
 let g:quickfixsigns_classes = ['qfl', 'vcsdiff', 'breakpoints']
 let g:quickfixsign_use_dummy = 0
@@ -290,3 +290,5 @@ augroup END
 " fix for vim-javascript + rainbow incompatibility
 autocmd FileType javascript syntax clear jsFuncBlock
 set nocursorline
+
+set ts=8 sw=8
