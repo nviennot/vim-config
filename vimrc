@@ -284,7 +284,7 @@ so ~/.vim/vimrc.mine
 
 " TODO raise contrast for comments
 
-autocmd FileType markdown setlocal syntax=off
+" autocmd FileType markdown setlocal syntax=off
 
 let g:vim_json_syntax_conceal = 0
 
@@ -308,4 +308,5 @@ augroup END
 autocmd FileType javascript syntax clear jsFuncBlock
 set nocursorline
 
-set ts=8 sw=8
+"set ts=8 sw=8
+"nmap <C-J> gJi <ESC>diW
