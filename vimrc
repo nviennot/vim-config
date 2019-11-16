@@ -203,7 +203,24 @@ let g:quickfixsigns_class_vcsdiff = { 'sign': '*quickfixsigns#vcsdiff#Signs',
                                     \ 'event': ['BufEnter', 'BufRead', 'BufWritePost'],
                                     \ 'level': 6}
 
-let g:Powerline_symbols = 'unicode'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.maxlinenr = ''
+let g:airline_symbols.linenr = ''
+let g:airline_section_b = '%-0.15{getcwd()}'
+  let g:airline_theme_patch_func = 'AirlineThemePatch'
+  function! AirlineThemePatch(palette)
+    if g:airline_theme == 'dark'
+      let a:palette.normal_paste = copy(a:palette.normal)
+      let a:palette.normal_paste['airline_a'] = copy(a:palette.normal_paste['airline_a'])
+      let a:palette.normal_paste['airline_a'][3] = 124
+      let a:palette.normal_paste['airline_a'][2] = 255
+    endif
+  endfunction
+
 set laststatus=2
 
 let g:ctrlp_map = '<Leader>.'
