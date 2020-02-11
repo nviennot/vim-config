@@ -293,20 +293,26 @@ let g:vim_json_syntax_conceal = 0
 let g:rainbow_conf = { 'ctermfgs': ['red', 'yellow', 'green', 'cyan', 'magenta', 'red', 'yellow', 'green', 'cyan', 'magenta'] }
 let g:rainbow_matching_filetypes = ['lisp', 'scheme', 'clojure', 'javascript', 'html']
 
-function s:load()
-  if count(g:rainbow_matching_filetypes, &ft) > 0
-    call rainbow#hook()
-  endif
-endfunction
+let g:rainbow_active = 0
 
-augroup rainbow
-  autocmd!
-  autocmd BufNewFile,BufReadPost,FilterReadPost,FileReadPost,Syntax * nested call s:load()
-augroup END
+"function s:load()
+"  if count(g:rainbow_matching_filetypes, &ft) > 0
+"    call rainbow#hook()
+"  endif
+"endfunction
+"
+"augroup rainbow
+"  autocmd!
+"  autocmd BufNewFile,BufReadPost,FilterReadPost,FileReadPost,Syntax * nested call s:load()
+"augroup END
 
 " fix for vim-javascript + rainbow incompatibility
-autocmd FileType javascript syntax clear jsFuncBlock
+" autocmd FileType javascript syntax clear jsFuncBlock
+
 set nocursorline
+
+"au FileType rust nmap <C-]> <Plug>(rust-def)
+"au FileType rust nmap <C-[> <Plug>(rust-doc)
 
 "set ts=8 sw=8
 "nmap <C-J> gJi <ESC>diW
