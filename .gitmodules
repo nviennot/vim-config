@@ -189,3 +189,6 @@
 [submodule "bundle/jsx-pretty"]
 	path = bundle/jsx-pretty
 	url = https://github.com/MaxMEllon/vim-jsx-pretty.git
+[submodule "bundle/julia"]
+	path = bundle/julia
+	url = https://github.com/JuliaEditorSupport/julia-vim.git
